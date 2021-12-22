@@ -13,7 +13,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>admin-starter-security</module>
-        <module>admin-starter-captcha</module>
     </modules>
 
 
