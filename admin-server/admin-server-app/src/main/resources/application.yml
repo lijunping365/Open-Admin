@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: admin-server-app
+  main:
+    allow-bean-definition-overriding: true # SpringBoot 2.1需要设置
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+  type-enums-package: com.pro.admin.server.enums*;com.pro.admin.common.enums*
+  global-config:
+    db-config:
+      id-type: auto
+
+logging:
+  level:
+    com.pro: INFO
