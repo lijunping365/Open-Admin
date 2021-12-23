@@ -55,7 +55,6 @@ public class LoginController {
 
     private Boolean validateCaptcha(BaseOAuthLoginReqDTO request){
         CaptchaVerifyRequest validateCodeVerifyReqDTO = new CaptchaVerifyRequest();
-        validateCodeVerifyReqDTO.setDeviceId(request.getDeviceId());
         validateCodeVerifyReqDTO.setCode(request.getCaptcha());
         return validateCodeService.validate(validateCodeVerifyReqDTO);
     }

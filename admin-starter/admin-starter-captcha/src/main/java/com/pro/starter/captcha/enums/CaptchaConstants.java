@@ -10,6 +10,6 @@ public interface CaptchaConstants {
   /**
    * 验证码保存到 redis 时的 Key
    */
-  String VALIDATE_CODE_KEY_FOR_REDIS_PREFIX = "CODE::REDIS::";
+  String VALIDATE_CODE_KEY_FOR_REDIS_PREFIX = "CAPTCHA:CODE:";
 
 }

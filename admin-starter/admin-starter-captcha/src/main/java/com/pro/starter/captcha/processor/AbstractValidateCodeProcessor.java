@@ -36,24 +36,23 @@ public abstract class AbstractValidateCodeProcessor<T extends BaseCaptchaRequest
       log.error("[验证码生成失败]:{}", e.getMessage());
       throw new ValidateCodeException("验证码生成失败");
     }
-    save(request, code);
+    save(code);
     send(request, code);
   }
 
   /**
    * 保存校验码
    */
-  private void save(T request, R validateCode) {
+  private void save(R validateCode) {
     ValidateCode code = new ValidateCode(validateCode.getCode(), validateCode.getExpireTime());
-    validateCodeRepository.save(request.getDeviceId(), code);
+    validateCodeRepository.save(code.getCode(), code);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public void validate(CaptchaVerifyRequest request) {
     String codeInRequest = request.getCode();
     // 获取验证码
-    R validateCode = (R) validateCodeRepository.get(request.getDeviceId());
+    ValidateCode validateCode = validateCodeRepository.get(request.getCode());
 
     if (validateCode == null) {
       throw new ValidateCodeException("验证码不存在");
@@ -61,7 +60,7 @@ public abstract class AbstractValidateCodeProcessor<T extends BaseCaptchaRequest
 
     // 判断验证码是否过期，过期将验证码移除
     if (validateCode.isExpired()) {
-      validateCodeRepository.remove(request.getDeviceId());
+      validateCodeRepository.remove(request.getCode());
       throw new ValidateCodeException("验证码已过期");
     }
 
@@ -70,7 +69,7 @@ public abstract class AbstractValidateCodeProcessor<T extends BaseCaptchaRequest
     }
 
     // 校验成功后将验证码移除
-    validateCodeRepository.remove(request.getDeviceId());
+    validateCodeRepository.remove(request.getCode());
   }
 
   /**

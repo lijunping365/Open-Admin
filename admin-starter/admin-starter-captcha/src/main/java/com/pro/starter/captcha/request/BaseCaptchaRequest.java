@@ -1,9 +1,7 @@
 package com.pro.starter.captcha.request;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -12,7 +10,4 @@ import java.io.Serializable;
 @Data
 public class BaseCaptchaRequest implements Serializable {
 
-    @NotBlank(message = "设备唯一 id 不能为空")
-    @ApiModelProperty("设备唯一 id")
-    private String deviceId;
 }
