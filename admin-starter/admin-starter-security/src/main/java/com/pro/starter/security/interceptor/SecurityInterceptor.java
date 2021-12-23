@@ -1,0 +1,92 @@
+package com.pro.starter.security.interceptor;
+
+import com.pro.starter.security.exception.SecurityException;
+import com.pro.admin.common.exception.ServiceException;
+import com.pro.admin.common.json.JSON;
+import com.pro.admin.common.vo.ResultEnum;
+import com.pro.starter.security.annotation.PreAuthorization;
+import com.pro.starter.security.service.AuthorityService;
+import com.pro.starter.security.service.TokenService;
+import com.pro.starter.security.context.UserSecurityContext;
+import com.pro.starter.security.context.UserSecurityContextHolder;
+import com.pro.starter.security.domain.Authentication;
+import com.pro.starter.security.utils.RequestUtils;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.PathMatcher;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
+
+
+/**
+ * @author : lijunping
+ * @weixin : ilwq18242076871
+ * Description: 认证拦截器
+ */
+@Slf4j
+@Data
+@Component
+public class SecurityInterceptor implements HandlerInterceptor {
+
+  @Autowired(required = false)
+  private TokenService tokenService;
+
+  @Autowired(required = false)
+  private AuthorityService authorityService;
+
+  @Override
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    try {
+      String accessToken = RequestUtils.extractTokenFromHeader(request);
+      Authentication authentication = tokenService.readAuthentication(accessToken);
+      UserSecurityContext user = JSON.parse(authentication.getUserDetails(), UserSecurityContext.class);
+      UserSecurityContextHolder.setContext(user);
+
+      HandlerMethod handlerMethod = (HandlerMethod) handler;
+      PreAuthorization authorization = handlerMethod.getMethodAnnotation(PreAuthorization.class);
+      if (Objects.isNull(authorization)) {
+        return true;
+      }
+
+      List<String> authorities = getAuthorities(request);
+      //认证通过且角色匹配的用户可访问当前路径
+      if (!CollectionUtils.containsAny(authorities, user.getAuthorities())) {
+        throw new SecurityException(ResultEnum.FORBIDDEN);
+      }
+      return true;
+    }catch (Exception e){
+      throw new ServiceException(ResultEnum.UNAUTHORIZED);
+    }
+  }
+
+
+  private List<String> getAuthorities(HttpServletRequest request){
+    PathMatcher pathMatcher = new AntPathMatcher();
+    Map<String, List<String>> authoritiesMap = authorityService.getAuthorities();
+    if (CollectionUtils.isEmpty(authoritiesMap)) {
+      throw new SecurityException(ResultEnum.FORBIDDEN);
+    }
+    Iterator<String> iterator = authoritiesMap.keySet().iterator();
+    List<String> authorities = new ArrayList<>();
+    while (iterator.hasNext()) {
+      String pattern = iterator.next();
+      if (pathMatcher.match(pattern, request.getRequestURI())) {
+        authorities.addAll(authoritiesMap.get(pattern));
+      }
+    }
+    return authorities;
+  }
+
+  @Override
+  public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    UserSecurityContextHolder.clear();
+  }
+}
