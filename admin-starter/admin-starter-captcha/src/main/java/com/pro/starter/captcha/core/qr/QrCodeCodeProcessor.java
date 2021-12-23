@@ -16,7 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -34,6 +36,9 @@ public class QrCodeCodeProcessor extends AbstractValidateCodeProcessor<QrCodeCap
 
   @Autowired
   private CaptchaProperties captchaProperties;
+
+  @Resource
+  protected HttpServletResponse response;
 
   @Override
   public QrCodeValidateCode generate() throws WriterException {

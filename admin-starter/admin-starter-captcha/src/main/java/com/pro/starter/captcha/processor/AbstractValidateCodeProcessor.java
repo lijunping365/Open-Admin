@@ -9,9 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-
 /**
  * @author : lijunping
  * @weixin : ilwq18242076871
@@ -23,9 +20,6 @@ public abstract class AbstractValidateCodeProcessor<T extends BaseCaptchaRequest
 
   @Autowired
   private ValidateCodeRepository validateCodeRepository;
-
-  @Resource
-  protected HttpServletResponse response;
 
   @Override
   public void process(T request){

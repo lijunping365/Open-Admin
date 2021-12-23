@@ -8,7 +8,9 @@ import com.pro.starter.captcha.properties.CaptchaProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -25,6 +27,9 @@ public class ImageCodeProcessor extends AbstractValidateCodeProcessor<ImageCaptc
   private final CaptchaProperties captchaProperties;
 
   private final Producer producer;
+
+  @Resource
+  protected HttpServletResponse response;
 
   public ImageCodeProcessor(CaptchaProperties captchaProperties, Producer producer) {
     this.captchaProperties = captchaProperties;
