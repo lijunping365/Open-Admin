@@ -1,12 +1,12 @@
 package com.pro.admin.server.controller;
 
+import com.pro.admin.server.service.ValidateCodeService;
 import com.pro.oauth.common.vo.Result;
-import com.pro.oauth.server.dto.req.ImageCaptchaReqDTO;
-import com.pro.oauth.server.dto.req.QrCodeCaptchaReqDTO;
-import com.pro.oauth.server.dto.req.SmsCaptchaReqDTO;
-import com.pro.oauth.server.rpc.ValidateCodeRpc;
+import com.pro.starter.captcha.core.image.ImageCaptchaRequest;
+import com.pro.starter.captcha.core.qr.QrCodeCaptchaRequest;
+import com.pro.starter.captcha.core.sms.SmsCaptchaRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,33 +24,21 @@ import javax.validation.Valid;
 @RequestMapping("/captcha")
 public class CaptchaController {
 
-    @DubboReference
-    private ValidateCodeRpc validateCodeRpc;
+    @Autowired
+    private ValidateCodeService validateCodeService;
 
     @PostMapping("/sendImageCaptcha")
-    public Result<String> sendImageCaptcha(@RequestBody @Valid ImageCaptchaReqDTO request){
-        Result<Boolean> result = validateCodeRpc.sendImageCaptcha(request);
-        if (result.isSuccess() && result.getData()){
-            return Result.succeed("验证码已发送，请注意查收");
-        }
-        return Result.failed("验证码发送失败");
+    public Result<Boolean> sendImageCaptcha(@RequestBody @Valid ImageCaptchaRequest request){
+        return Result.succeed(validateCodeService.sendImageCaptcha(request));
     }
 
     @PostMapping("/sendSmsCaptcha")
-    public Result<String> sendSmsCaptcha(@RequestBody @Valid SmsCaptchaReqDTO request){
-        Result<Boolean> result = validateCodeRpc.sendSmsCaptcha(request);
-        if (result.isSuccess() && result.getData()){
-            return Result.succeed("验证码已发送，请注意查收");
-        }
-        return Result.failed("验证码发送失败");
+    public Result<Boolean> sendSmsCaptcha(@RequestBody @Valid SmsCaptchaRequest request){
+        return Result.succeed(validateCodeService.sendSmsCaptcha(request));
     }
 
     @PostMapping("/sendQrCodeCaptcha")
-    public Result<String> sendSmsCaptcha(@RequestBody @Valid QrCodeCaptchaReqDTO request){
-        Result<Boolean> result = validateCodeRpc.sendQrCodeCaptcha(request);
-        if (result.isSuccess() && result.getData()){
-            return Result.succeed("验证码已发送，请注意查收");
-        }
-        return Result.failed("验证码发送失败");
+    public Result<Boolean> sendSmsCaptcha(@RequestBody @Valid QrCodeCaptchaRequest request){
+        return Result.succeed(validateCodeService.sendQrCodeCaptcha(request));
     }
 }
