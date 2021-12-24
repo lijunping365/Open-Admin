@@ -16,9 +16,10 @@ public class SecurityProperties {
       // Swagger 相关
       "/doc.html", "/swagger-resources", "/swagger-resources/**", "/webjars/**", "v2/**", "/favicon.ico",
       // Actuator 相关
-
       // 登录相关
-      "/login/**", "/validate/code/**"
+      "/login/**",
+      // 验证码相关
+      "/captcha/**"
   };
 
   /**

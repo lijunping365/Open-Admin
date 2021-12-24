@@ -36,10 +36,8 @@ import java.util.*;
 @Component
 public class SecurityInterceptor implements HandlerInterceptor {
 
-  @Autowired(required = false)
   private TokenService tokenService;
 
-  @Autowired(required = false)
   private AuthorityService authorityService;
 
   @Override
@@ -72,7 +70,7 @@ public class SecurityInterceptor implements HandlerInterceptor {
     PathMatcher pathMatcher = new AntPathMatcher();
     Map<String, List<String>> authoritiesMap = authorityService.getAuthorities();
     if (CollectionUtils.isEmpty(authoritiesMap)) {
-      throw new SecurityException(ResultEnum.FORBIDDEN);
+      return Collections.emptyList();
     }
     Iterator<String> iterator = authoritiesMap.keySet().iterator();
     List<String> authorities = new ArrayList<>();

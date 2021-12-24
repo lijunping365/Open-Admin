@@ -8,6 +8,7 @@ import java.util.Map;
  * @Date: 2021-12-23 23:48
  */
 public interface AuthorityService {
+
     Map<String, List<String>> getAuthorities();
 
 }
