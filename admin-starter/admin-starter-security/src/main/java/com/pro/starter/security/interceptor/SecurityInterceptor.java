@@ -13,8 +13,6 @@ import com.pro.starter.security.domain.Authentication;
 import com.pro.starter.security.utils.RequestUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.PathMatcher;
@@ -33,12 +31,16 @@ import java.util.*;
  */
 @Slf4j
 @Data
-@Component
 public class SecurityInterceptor implements HandlerInterceptor {
 
-  private TokenService tokenService;
+  private final TokenService tokenService;
 
-  private AuthorityService authorityService;
+  private final AuthorityService authorityService;
+
+  public SecurityInterceptor(TokenService tokenService, AuthorityService authorityService){
+    this.tokenService = tokenService;
+    this.authorityService = authorityService;
+  }
 
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
