@@ -1,5 +1,6 @@
 package com.pro;
 
+import com.pro.starter.logger.annotation.EnableLogger;
 import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,6 +9,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 /**
  * @author lijunping on 2021/12/22
  */
+@EnableLogger(packages = "com.pro.admin")
 @EnableDubbo
 @EnableDiscoveryClient
 @SpringBootApplication
