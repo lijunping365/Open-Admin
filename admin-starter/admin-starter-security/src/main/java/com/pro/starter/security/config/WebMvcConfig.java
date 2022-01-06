@@ -51,7 +51,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     registry.addInterceptor(securityInterceptor())
       .excludePathPatterns(securityProperties.getIgnorePaths())
       .excludePathPatterns(securityProperties.getDefaultIgnorePaths());
-    logger.info("[addInterceptors][加载 SecurityInterceptor 拦截器完成]");
   }
 
 }

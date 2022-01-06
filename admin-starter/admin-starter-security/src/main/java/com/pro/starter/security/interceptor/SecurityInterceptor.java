@@ -1,5 +1,6 @@
 package com.pro.starter.security.interceptor;
 
+import com.pro.admin.common.constants.CommonConstant;
 import com.pro.starter.security.exception.SecurityException;
 import com.pro.admin.common.exception.ServiceException;
 import com.pro.admin.common.json.JSON;
@@ -10,7 +11,6 @@ import com.pro.starter.security.service.TokenService;
 import com.pro.starter.security.context.UserSecurityContext;
 import com.pro.starter.security.context.UserSecurityContextHolder;
 import com.pro.starter.security.domain.Authentication;
-import com.pro.starter.security.utils.RequestUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
@@ -25,6 +25,7 @@ import java.util.*;
 
 
 /**
+ * 认证通过且角色匹配的用户可访问当前路径
  * @author : lijunping
  * @weixin : ilwq18242076871
  * Description: 认证拦截器
@@ -45,11 +46,10 @@ public class SecurityInterceptor implements HandlerInterceptor {
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
     try {
-      String accessToken = RequestUtils.extractTokenFromHeader(request);
+      String accessToken = extractTokenFromHeader(request);
       Authentication authentication = tokenService.readAuthentication(accessToken);
       UserSecurityContext user = JSON.parse(authentication.getUserDetails(), UserSecurityContext.class);
       UserSecurityContextHolder.setContext(user);
-
       HandlerMethod handlerMethod = (HandlerMethod) handler;
       PreAuthorization authorization = handlerMethod.getMethodAnnotation(PreAuthorization.class);
       if (Objects.isNull(authorization)) {
@@ -57,7 +57,6 @@ public class SecurityInterceptor implements HandlerInterceptor {
       }
 
       List<String> authorities = getAuthorities(request);
-      //认证通过且角色匹配的用户可访问当前路径
       if (!CollectionUtils.containsAny(authorities, user.getAuthorities())) {
         throw new SecurityException(ResultEnum.FORBIDDEN);
       }
@@ -67,6 +66,13 @@ public class SecurityInterceptor implements HandlerInterceptor {
     }
   }
 
+  private String extractTokenFromHeader(HttpServletRequest request) {
+    String header = request.getHeader(CommonConstant.AUTHENTICATION_HEADER);
+    if (header == null || !header.startsWith(CommonConstant.AUTHENTICATION_TYPE)) {
+      throw new SecurityException("错误的请求头");
+    }
+    return header.substring(7);
+  }
 
   private List<String> getAuthorities(HttpServletRequest request){
     PathMatcher pathMatcher = new AntPathMatcher();

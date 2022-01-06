@@ -1,6 +1,7 @@
 package com.pro.starter.logger.selector;
 
-import com.pro.starter.logger.config.LoggerProxyAutoConfiguration;
+import com.pro.starter.logger.aspect.LogAnnotationAop;
+import com.pro.starter.logger.config.LoggerAutoConfiguration;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.type.AnnotationMetadata;
 
@@ -11,6 +12,9 @@ public class LoggerConfigureSelector implements ImportSelector {
 
     @Override
     public String[] selectImports(AnnotationMetadata importingClassMetadata) {
-        return new String[]{LoggerProxyAutoConfiguration.class.getName()};
+        return new String[]{
+            LogAnnotationAop.class.getName(),
+            LoggerAutoConfiguration.class.getName()
+        };
     }
 }

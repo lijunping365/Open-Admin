@@ -6,10 +6,6 @@ import com.pro.starter.logger.function.IFunction;
  * @author lijunping on 2022/1/5
  */
 public class LoggerInterceptor {
-    public void setPackages(String packages) {
-
-    }
-
     public void setIFunction(IFunction iFunction) {
 
     }

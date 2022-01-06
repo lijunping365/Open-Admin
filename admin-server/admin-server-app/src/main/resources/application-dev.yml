@@ -42,13 +42,6 @@ spring:
         max-idle: 8
         min-idle: 0
 
-
-  cloud:
-    nacos:
-      discovery:
-        server-addr: 127.0.0.1:8848
-
-
 dubbo:
   application:
     name: admin-server-app
