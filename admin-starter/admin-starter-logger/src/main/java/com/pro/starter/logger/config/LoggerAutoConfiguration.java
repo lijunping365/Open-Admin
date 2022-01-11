@@ -5,8 +5,7 @@ import com.pro.starter.logger.function.support.DefaultFunction;
 import com.pro.starter.logger.function.IFunction;
 import com.pro.starter.logger.function.IParseFunction;
 import com.pro.starter.logger.function.support.DefaultParseFunction;
-import com.pro.starter.logger.interceptor.LoggerInterceptor;
-import lombok.extern.slf4j.Slf4j;
+import com.pro.starter.logger.handler.LoggerHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -19,14 +18,13 @@ import java.util.List;
 /**
  * @author lijunping on 2022/1/5
  */
-@Slf4j
 @Configuration
 public class LoggerAutoConfiguration {
 
     @Bean
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
-    public LoggerInterceptor logRecordInterceptor(IFunction iFunction) {
-        LoggerInterceptor interceptor = new LoggerInterceptor();
+    public LoggerHandler logRecordInterceptor(IFunction iFunction) {
+        LoggerHandler interceptor = new LoggerHandler();
         interceptor.setIFunction(iFunction);
         return interceptor;
     }
