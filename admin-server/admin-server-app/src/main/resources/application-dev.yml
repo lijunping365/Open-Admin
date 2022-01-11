@@ -53,3 +53,8 @@ dubbo:
     dubbo:
       name: dubbo
       port: -1
+
+
+com:
+  pro:
+    security:

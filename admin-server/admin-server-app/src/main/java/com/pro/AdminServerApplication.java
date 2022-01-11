@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * @author lijunping on 2021/12/22
  */
-@EnableLogger
 @EnableDubbo
+@EnableLogger
 @SpringBootApplication
 public class AdminServerApplication {
 
