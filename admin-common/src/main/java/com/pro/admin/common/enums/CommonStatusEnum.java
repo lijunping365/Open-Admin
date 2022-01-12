@@ -2,12 +2,18 @@ package com.pro.admin.common.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.pro.admin.common.interfaces.CommonEnumConverter;
 import com.pro.admin.common.interfaces.IntArrayValuable;
 import com.pro.admin.common.interfaces.IntValuable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -16,6 +22,7 @@ import java.util.Objects;
  */
 @AllArgsConstructor
 @Getter
+@JsonDeserialize(using = CommonStatusEnum.EnumDeserializer.class)
 public enum CommonStatusEnum implements IntArrayValuable, IntValuable {
 
     YES(1, "启用"),
@@ -48,6 +55,15 @@ public enum CommonStatusEnum implements IntArrayValuable, IntValuable {
     public static class Converter implements CommonEnumConverter<CommonStatusEnum> {
         public CommonStatusEnum intToEnum(Integer value) {
             return CommonStatusEnum.of(value);
+        }
+    }
+
+    public static class EnumDeserializer extends JsonDeserializer<CommonStatusEnum> {
+
+        @Override
+        public CommonStatusEnum deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+            int valueAsInt = jsonParser.getValueAsInt();
+            return CommonStatusEnum.of(valueAsInt);
         }
     }
 }
