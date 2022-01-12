@@ -14,7 +14,6 @@
     <modules>
         <module>admin-starter-security</module>
         <module>admin-starter-captcha</module>
-        <module>admin-starter-logger</module>
     </modules>
 
 
