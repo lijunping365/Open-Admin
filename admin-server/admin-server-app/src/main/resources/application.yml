@@ -19,5 +19,3 @@ mybatis-plus:
 logging:
   level:
     com.pro: INFO
-
-debug: true

@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  *
  * @author lijunping
  */
-@MapperScan(basePackages = {"com.pro.oauth.**.mapper"})
+@MapperScan(basePackages = {"com.pro.admin.**.mapper"})
 @EnableTransactionManagement
 @Configuration
 public class MyBatisPlusConfig {
