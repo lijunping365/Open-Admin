@@ -1,15 +1,11 @@
 package com.pro.admin.server.controller;
 
-import com.pro.admin.server.service.ValidateCodeService;
+import com.pro.admin.server.dto.req.SysMobileOAuthLoginReqDTO;
+import com.pro.admin.server.dto.req.SysPasswordOAuthLoginReqDTO;
+import com.pro.admin.server.dto.resp.SysOAuthLoginRespDTO;
+import com.pro.admin.server.service.SysLoginService;
 import com.pro.oauth.common.vo.Result;
-import com.pro.oauth.server.dto.req.BaseOAuthLoginReqDTO;
-import com.pro.oauth.server.dto.req.MobileOAuthLoginReqDTO;
-import com.pro.oauth.server.dto.req.PasswordOAuthLoginReqDTO;
-import com.pro.oauth.server.dto.resp.OAuthLoginRespDTO;
-import com.pro.oauth.server.rpc.OAuthLoginRpc;
-import com.pro.starter.captcha.request.CaptchaVerifyRequest;
 import io.swagger.annotations.ApiOperation;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,35 +23,20 @@ import javax.validation.Valid;
 @RequestMapping("/login")
 public class LoginController {
 
-    @DubboReference
-    private OAuthLoginRpc oAuthLoginRpc;
-
     @Autowired
-    private ValidateCodeService validateCodeService;
+    private SysLoginService loginService;
 
     @ApiOperation("用户名密码登录")
     @PostMapping("/account")
-    public Result<OAuthLoginRespDTO> loginByUsername(@RequestBody @Valid PasswordOAuthLoginReqDTO request){
-        Boolean validateResult = validateCaptcha(request);
-        if (!validateResult){
-            return Result.failed("验证码输入错误");
-        }
-        return oAuthLoginRpc.loginByUsername(request);
+    public Result<SysOAuthLoginRespDTO> loginByUsername(@RequestBody SysPasswordOAuthLoginReqDTO request){
+        return Result.succeed(loginService.loginByUsername(request));
     }
 
     @ApiOperation("手机号短信验证码登录")
     @PostMapping("/mobile")
-    public Result<OAuthLoginRespDTO> loginByMobile(@RequestBody @Valid MobileOAuthLoginReqDTO request){
-        Boolean validateResult = validateCaptcha(request);
-        if (!validateResult){
-            return Result.failed("验证码输入错误");
-        }
-        return oAuthLoginRpc.loginByMobile(request);
+    public Result<SysOAuthLoginRespDTO> loginByMobile(@RequestBody @Valid SysMobileOAuthLoginReqDTO request){
+        return Result.succeed(loginService.loginByMobile(request));
     }
 
-    private Boolean validateCaptcha(BaseOAuthLoginReqDTO request){
-        CaptchaVerifyRequest validateCodeVerifyReqDTO = new CaptchaVerifyRequest();
-        validateCodeVerifyReqDTO.setCode(request.getCaptcha());
-        return validateCodeService.validate(validateCodeVerifyReqDTO);
-    }
+
 }
