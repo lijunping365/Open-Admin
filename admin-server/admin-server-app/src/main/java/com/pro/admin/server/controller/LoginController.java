@@ -28,7 +28,7 @@ public class LoginController {
 
     @ApiOperation("用户名密码登录")
     @PostMapping("/account")
-    public Result<SysOAuthLoginRespDTO> loginByUsername(@RequestBody SysPasswordOAuthLoginReqDTO request){
+    public Result<SysOAuthLoginRespDTO> loginByUsername(@RequestBody @Valid SysPasswordOAuthLoginReqDTO request){
         return Result.succeed(loginService.loginByUsername(request));
     }
 
