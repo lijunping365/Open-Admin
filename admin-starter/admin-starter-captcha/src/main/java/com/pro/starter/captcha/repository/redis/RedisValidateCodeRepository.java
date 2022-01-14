@@ -46,13 +46,13 @@ public class RedisValidateCodeRepository implements ValidateCodeRepository {
   /**
    * 构建验证码在redis中的key ---- 该key类似与cookie
    *
-   * @param deviceId
+   * @param captcha
    * @return
    */
-  private String buildKey(String deviceId) {
-    if (StringUtils.isBlank(deviceId)) {
-      throw new ValidateCodeException("请在请求头中携带deviceId参数");
+  private String buildKey(String captcha) {
+    if (StringUtils.isBlank(captcha)) {
+      throw new ValidateCodeException("captcha must not be null");
     }
-    return CaptchaConstants.VALIDATE_CODE_KEY_FOR_REDIS_PREFIX + ":" + deviceId;
+    return CaptchaConstants.VALIDATE_CODE_KEY_FOR_REDIS_PREFIX + ":" + captcha;
   }
 }
