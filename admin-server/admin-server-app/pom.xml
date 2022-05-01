@@ -26,6 +26,11 @@
 
         <dependency>
             <groupId>com.saucesubfresh</groupId>
+            <artifactId>open-starter-captcha</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.saucesubfresh</groupId>
             <artifactId>open-starter-oauth</artifactId>
         </dependency>
 

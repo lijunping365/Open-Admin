@@ -32,6 +32,7 @@
 
         <!-- RPC 相关依赖 -->
         <dubbo.version>3.0.2</dubbo.version>
+        <open-starter-captcha.version>1.0.0</open-starter-captcha.version>
         <open-starter-oauth.version>1.0.0</open-starter-oauth.version>
         <open-starter-security.version>1.0.0</open-starter-security.version>
 
@@ -95,6 +96,24 @@
             </dependency>
 
             <!-- 工具类开始 -->
+            <dependency>
+                <groupId>com.saucesubfresh</groupId>
+                <artifactId>open-starter-captcha</artifactId>
+                <version>${open-starter-captcha.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.saucesubfresh</groupId>
+                <artifactId>open-starter-oauth</artifactId>
+                <version>${open-starter-oauth.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.saucesubfresh</groupId>
+                <artifactId>open-starter-security</artifactId>
+                <version>${open-starter-security.version}</version>
+            </dependency>
+
             <!--  mapstruct  -->
             <dependency>
                 <groupId>org.mapstruct</groupId>
