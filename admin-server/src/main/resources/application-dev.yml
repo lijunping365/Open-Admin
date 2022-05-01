@@ -3,7 +3,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     # 数据源基本配置
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/oauth?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://127.0.0.1:3306/open_admin?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT&allowPublicKeyRetrieval=true
     username: root
     password:
     # 数据源其他配置
@@ -41,20 +41,3 @@ spring:
         max-wait: -1ms
         max-idle: 8
         min-idle: 0
-
-dubbo:
-  application:
-    name: admin-server-app
-  scan:
-    base-packages: com.pro.admin.server.rpc
-  registry:
-    address: nacos://127.0.0.1:8848
-  protocols:
-    dubbo:
-      name: dubbo
-      port: -1
-
-
-com:
-  pro:
-    security:

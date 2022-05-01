@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.pro.admin.server.mapper.SysMenuMapper">
+<mapper namespace="com.saucesubfresh.admin.server.mapper.SysMenuMapper">
 
   <!--
     这里记录一个报错：使用mysql，group by分组时出现错误：
@@ -9,7 +9,7 @@
     问题原因：ONLY_FULL_GROUP_BY的意思是：对于GROUP BY聚合操作，如果在SELECT中的列，没有在GROUP BY中出现，那么这个SQL是不合法的，因为列不在GROUP BY从句中，也就是说查出来的列必须在group by后面出现否则就会报错，或者这个字段出现在聚合函数里面。
     解决方法: group by分组的字段 必须在 select 查询的字段之中，而且还不能写 select m.*,必须显示的表明 SELECT m.id, group by m.id ；group by 要在 order by 之前
   -->
-  <select id="getMenuList" resultType="com.pro.admin.server.entity.SysMenuDO">
+  <select id="getMenuList" resultType="com.saucesubfresh.admin.server.entity.SysMenuDO">
       SELECT m.id, m.pid, m.name, m.icon, m.path, m.sort FROM fresh_sys_user u
       JOIN fresh_sys_user_role ur on u.id=ur.user_id
       JOIN fresh_sys_role r on ur.role_id=r.id

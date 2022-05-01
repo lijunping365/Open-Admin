@@ -1,17 +1,17 @@
 server:
-  port: 8090
+  port: 8080
 
 spring:
   profiles:
     active: dev
   application:
-    name: admin-server-app
+    name: open-admin
   main:
     allow-bean-definition-overriding: true # SpringBoot 2.1需要设置
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml
-  type-enums-package: com.pro.admin.server.enums*;com.pro.admin.common.enums*
+  type-enums-package: com.saucesubfresh.admin.server.enums*;com.saucesubfresh.admin.common.enums*
   global-config:
     db-config:
       id-type: auto
