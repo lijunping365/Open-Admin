@@ -16,6 +16,3 @@ mybatis-plus:
     db-config:
       id-type: auto
 
-logging:
-  level:
-    com.pro: INFO
