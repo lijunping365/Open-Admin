@@ -2,7 +2,6 @@ package com.pro.admin.server.convert;
 
 
 import com.pro.admin.common.enums.CommonStatusEnum;
-import com.pro.admin.server.dto.create.SysDictCreateDTO;
 import com.pro.admin.server.dto.resp.SysDictRespDTO;
 import com.pro.admin.server.dto.update.SysDictUpdateDTO;
 import com.pro.admin.server.entity.SysDictDO;

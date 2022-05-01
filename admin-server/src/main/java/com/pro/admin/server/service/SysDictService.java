@@ -4,7 +4,6 @@ package com.pro.admin.server.service;
 
 
 import com.pro.admin.common.vo.PageResult;
-import com.pro.admin.server.dto.create.SysDictCreateDTO;
 import com.pro.admin.server.dto.req.SysDictReqDTO;
 import com.pro.admin.server.dto.resp.SysDictRespDTO;
 import com.pro.admin.server.dto.update.SysDictUpdateDTO;
