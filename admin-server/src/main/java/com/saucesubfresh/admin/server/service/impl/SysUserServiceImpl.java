@@ -1,8 +1,10 @@
 package com.saucesubfresh.admin.server.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.saucesubfresh.admin.common.vo.PageResult;
 import com.saucesubfresh.admin.server.convert.SysUserConvert;
 import com.saucesubfresh.admin.server.dto.create.SysUserCreateDTO;
+import com.saucesubfresh.admin.server.dto.req.SysUserReqDTO;
 import com.saucesubfresh.admin.server.dto.resp.SysUserRespDTO;
 import com.saucesubfresh.admin.server.dto.update.SysUserUpdateDTO;
 import com.saucesubfresh.admin.server.entity.SysRoleDO;
@@ -61,6 +63,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
     List<SysUserDO> sysUserDOS = sysUserUpdateDTO.getUserIds().stream().map(e -> sysUserMapper.loadUserByUserId(e)).collect(Collectors.toList());
     this.updateBatchById(sysUserDOS);
     return true;
+  }
+
+  @Override
+  public PageResult<SysUserRespDTO> selectPage(SysUserReqDTO sysUserReqDTO) {
+    return null;
   }
 
   private SysUserRespDTO mapUserRoles(SysUserRespDTO sysUserRespDTO) {

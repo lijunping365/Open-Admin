@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  * @date 2020-08-23 09:27:19
  */
 @Data
-@TableName("fresh_sys_user")
+@TableName("open_admin_user")
 public class SysUserDO implements Serializable {
   private static final long serialVersionUID = 1L;
 

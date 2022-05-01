@@ -1,6 +1,7 @@
 package com.saucesubfresh.admin.server.service;
 
 
+import com.saucesubfresh.admin.common.vo.PageResult;
 import com.saucesubfresh.admin.server.dto.create.SysUserCreateDTO;
 import com.saucesubfresh.admin.server.dto.req.SysUserReqDTO;
 import com.saucesubfresh.admin.server.dto.resp.SysUserRespDTO;
@@ -20,5 +21,7 @@ public interface SysUserService {
   SysUserRespDTO saveUser(SysUserCreateDTO sysUserCreateDTO);
 
   boolean updateBatch(SysUserUpdateDTO sysUserUpdateDTO);
+
+  PageResult<SysUserRespDTO> selectPage(SysUserReqDTO sysUserReqDTO);
 }
 
