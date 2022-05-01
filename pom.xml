@@ -12,7 +12,6 @@
         <module>admin-dependencies</module>
         <module>admin-common</module>
         <module>admin-server</module>
-        <module>admin-starter</module>
     </modules>
 
     <properties>

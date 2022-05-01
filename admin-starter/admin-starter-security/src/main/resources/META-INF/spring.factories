@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.pro.starter.security.config.SecurityAutoConfiguration

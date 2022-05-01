@@ -32,11 +32,10 @@
 
         <!-- RPC 相关依赖 -->
         <dubbo.version>3.0.2</dubbo.version>
+        <open-starter-oauth.version>1.0.0</open-starter-oauth.version>
+        <open-starter-security.version>1.0.0</open-starter-security.version>
 
         <!-- 第三方依赖版本 -->
-        <!-- knife4j -->
-        <knife4j-dependencies.version>2.0.5</knife4j-dependencies.version>
-        <swagger-annotation-version>1.5.24</swagger-annotation-version>
         <!-- mybatis-plus -->
         <mybatis-plus.version>3.4.1</mybatis-plus.version>
         <!-- redisson -->
@@ -45,9 +44,7 @@
         <druid.version>1.2.1</druid.version>
 
         <!-- 工具类 -->
-        <jsoup.version>1.13.1</jsoup.version>
         <assertj.version>1.5.0</assertj.version>
-        <hutool.version>5.4.2</hutool.version>
         <!-- mapstruct -->
         <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
         <commons-io.version>2.8.0</commons-io.version>
@@ -97,20 +94,6 @@
                 <version>${dubbo.version}</version>
             </dependency>
 
-            <!-- knife4j -->
-            <dependency>
-                <groupId>com.github.xiaoymin</groupId>
-                <artifactId>knife4j-dependencies</artifactId>
-                <version>${knife4j-dependencies.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.swagger</groupId>
-                <artifactId>swagger-annotations</artifactId>
-                <version>${swagger-annotation-version}</version>
-            </dependency>
-
             <!-- 工具类开始 -->
             <!--  mapstruct  -->
             <dependency>
@@ -154,33 +137,6 @@
                 <groupId>commons-fileupload</groupId>
                 <artifactId>commons-fileupload</artifactId>
                 <version>${commons-fileupload.version}</version>
-            </dependency>
-            <!-- 阿里巴巴 fastjson -->
-            <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
-            <!--<dependency>
-              <groupId>com.alibaba</groupId>
-              <artifactId>fastjson</artifactId>
-              <version>${fastjson.version}</version>
-            </dependency>-->
-            <!-- hutool util -->
-            <!-- https://mvnrepository.com/artifact/cn.hutool/hutool-all -->
-            <dependency>
-                <groupId>cn.hutool</groupId>
-                <artifactId>hutool-all</artifactId>
-                <version>${hutool.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.hutool</groupId>
-                <artifactId>hutool-core</artifactId>
-                <version>${hutool.version}</version>
-            </dependency>
-            <!-- html解析-->
-            <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
-            <dependency>
-                <groupId>org.jsoup</groupId>
-                <artifactId>jsoup</artifactId>
-                <version>${jsoup.version}</version>
-                <optional>true</optional>
             </dependency>
             <!-- mybatis-plus start-->
             <dependency>
