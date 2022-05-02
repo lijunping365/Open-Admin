@@ -59,7 +59,7 @@ public class SysRegionDO extends BaseDO implements Serializable {
   /**
    * 是否展示
    */
-  private CommonStatusEnum showStatus;
+  private Integer showStatus;
   /**
    * 简称-全拼
    */

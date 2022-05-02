@@ -37,9 +37,6 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-  @Value("${spring.application.name}")
-  private String applicationName;
-
   @ExceptionHandler({IllegalArgumentException.class})
   public Result<Object> badRequest(IllegalArgumentException ex) {
     log.warn("[illegalArgumentExceptionHandler]", ex);

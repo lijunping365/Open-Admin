@@ -7,7 +7,7 @@
     SELECT sr.* FROM open_admin_user_role sur
     LEFT JOIN open_admin_role sr on sur.role_id = sr.id
     WHERE sur.user_id = #{userId}
-        AND sr.id IS NOT NULL
+    AND sr.id IS NOT NULL
     GROUP BY sr.id
   </select>
 </mapper>

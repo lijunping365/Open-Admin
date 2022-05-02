@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
  * @Date: 2020-11-04 16:32
  */
 @Data
-public abstract class BaseDO {
+public class BaseDO {
 
   /**
    * 创建时间

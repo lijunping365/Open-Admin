@@ -55,5 +55,5 @@ public class SysMenuDO extends BaseDO implements Serializable {
   /**
    * 菜单状态启用状态（1 启用，0 禁用）
    */
-  private CommonStatusEnum enableStatus;
+  private Integer enableStatus;
 }
