@@ -4,16 +4,16 @@
 <mapper namespace="com.saucesubfresh.admin.server.mapper.SysRoleResourceMapper">
   <select id="loadResourceRolesMap" resultType="java.util.HashMap">
 
-        SELECT sro.name as "role", sre.path as "url" FROM `fresh_sys_role_resource` srr
-        LEFT JOIN fresh_sys_role sro on srr.role_id= sro.id
-        LEFT JOIN fresh_sys_resource sre on srr.resource_id = sre.id
+        SELECT sro.name as "role", sre.path as "url" FROM `open_admin_role_resource` srr
+        LEFT JOIN open_admin_role sro on srr.role_id= sro.id
+        LEFT JOIN open_admin_resource sre on srr.resource_id = sre.id
 
   </select>
 
   <select id="loadRoleResourcesByRoleId" resultType="com.saucesubfresh.admin.server.entity.SysResourceDO">
 
-        SELECT sr.* FROM fresh_sys_role_resource srr
-        LEFT JOIN fresh_sys_resource sr on srr.resource_id = sr.id
+        SELECT sr.* FROM open_admin_role_resource srr
+        LEFT JOIN open_admin_resource sr on srr.resource_id = sr.id
         WHERE srr.role_id = #{roleId}
             AND sr.id IS NOT NULL
         GROUP BY sr.id

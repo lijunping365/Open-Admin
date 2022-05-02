@@ -4,8 +4,8 @@
 <mapper namespace="com.saucesubfresh.admin.server.mapper.SysUserRoleMapper">
 
   <select id="loadUserRolesByUserId" resultType="com.saucesubfresh.admin.server.entity.SysRoleDO">
-    SELECT sr.* FROM fresh_sys_user_role sur
-    LEFT JOIN fresh_sys_role sr on sur.role_id = sr.id
+    SELECT sr.* FROM open_admin_user_role sur
+    LEFT JOIN open_admin_role sr on sur.role_id = sr.id
     WHERE sur.user_id = #{userId}
         AND sr.id IS NOT NULL
     GROUP BY sr.id
