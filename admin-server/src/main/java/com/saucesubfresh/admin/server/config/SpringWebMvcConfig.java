@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+@Import(JacksonConfiguration.class)
 public class SpringWebMvcConfig {
 
     /**
