@@ -66,14 +66,4 @@ public class SysMenuController {
     return Result.succeed(sysMenuService.getMenuTree(UserSecurityContextHolder.getUserId()));
   }
 
-  /**
-   * 获取后台菜单树,不传参数表示查询全部，1 表示查询全部启用的， 0 表示查询全部未启用的
-   * @param total
-   * @return
-   */
-  @GetMapping("/treeList")
-  public Result<List<SysMenuRespDTO>> treeList(@RequestParam(value = "total", required = false) Integer total) {
-    return Result.succeed(sysMenuService.treeList(total));
-  }
-
 }

@@ -79,13 +79,4 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuDO> im
     sysMenuMapper.deleteById(id);
     return true;
   }
-
-  @Override
-  public List<SysMenuRespDTO> treeList(Integer total) {
-    List<SysMenuDO> menuList = sysMenuMapper.queryList(total);
-    List<SysMenuRespDTO> menuRespDTOS = SysMenuConvert.INSTANCE.convertList(menuList);
-    menuRespDTOS = new TreeUtils<SysMenuRespDTO>().buildTree(menuRespDTOS);
-    return menuRespDTOS;
-  }
-
 }

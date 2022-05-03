@@ -31,7 +31,5 @@ public interface SysMenuService {
   boolean update(SysMenuUpdateDTO sysMenuUpdateDTO);
 
   boolean delete(Long id);
-
-  List<SysMenuRespDTO> treeList(Integer total);
 }
 
