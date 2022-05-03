@@ -5,6 +5,10 @@ import com.saucesubfresh.admin.common.exception.BaseException;
 import com.saucesubfresh.admin.common.exception.ControllerException;
 import com.saucesubfresh.admin.common.exception.ServiceException;
 import com.saucesubfresh.admin.common.vo.Result;
+import com.saucesubfresh.admin.common.vo.ResultEnum;
+import com.saucesubfresh.starter.captcha.exception.ValidateCodeException;
+import com.saucesubfresh.starter.oauth.exception.AuthenticationException;
+import com.saucesubfresh.starter.security.exception.SecurityException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -147,8 +151,6 @@ public class GlobalExceptionHandler {
 
   /**
    * 处理业务异常 ServiceException
-   * <p>
-   * 例如说，商品库存不足，用户手机号已存在。
    */
   @ExceptionHandler({ServiceException.class})
   public Result<Object> serviceException(ServiceException ex) {
@@ -158,12 +160,10 @@ public class GlobalExceptionHandler {
 
   /**
    * 处理业务异常 ControllerException
-   * <p>
-   * 例如说，商品库存不足，用户手机号已存在。
    */
   @ExceptionHandler({ControllerException.class})
   public Result<Object> controllerException(ControllerException ex) {
-    log.warn("[serviceExceptionHandler]", ex);
+    log.warn("[controllerExceptionHandler]", ex);
     return Result.failed(ex.getCode(), ex.getMessage());
   }
 
@@ -185,22 +185,40 @@ public class GlobalExceptionHandler {
     return Result.failed(ex.getCode(), ex.getMessage());
   }
 
+  @ExceptionHandler({SecurityException.class})
+  public Result<Object> securityException(SecurityException ex) {
+    log.warn("[securityException]", ex);
+    return Result.failed(ResultEnum.ERROR.getCode(), ex.getMessage());
+  }
+
+  @ExceptionHandler({ValidateCodeException.class})
+  public Result<Object> validateCodeException(ValidateCodeException ex) {
+    log.warn("[validateCodeException]", ex);
+    return Result.failed(ResultEnum.ERROR.getCode(), ex.getMessage());
+  }
+
+  @ExceptionHandler({AuthenticationException.class})
+  public Result<Object> authenticationException(AuthenticationException ex) {
+    log.warn("[AuthenticationException]", ex);
+    return Result.failed(ResultEnum.ERROR.getCode(), ex.getMessage());
+  }
+
   @ExceptionHandler({RuntimeException.class})
-  public Result<Object> runtime(HttpServletRequest request, RuntimeException ex) {
+  public Result<Object> runtime(RuntimeException ex) {
     log.warn("[runtimeExceptionHandler]", ex);
-    return Result.failed(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
+    return Result.failed(ResultEnum.ERROR.getCode(), ex.getMessage());
   }
 
   @ExceptionHandler({Exception.class})
-  public Result<Object> exception(HttpServletRequest request, Exception ex) {
+  public Result<Object> exception(Exception ex) {
     log.warn("[exceptionHandler]", ex);
-    return Result.failed(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
+    return Result.failed(ResultEnum.ERROR.getCode(), ex.getMessage());
   }
 
   @ExceptionHandler({Throwable.class})
-  public Result<Object> error(HttpServletRequest request, Throwable ex) {
+  public Result<Object> error(Throwable ex) {
     log.warn("[throwableHandler]", ex);
-    return Result.failed(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
+    return Result.failed(ResultEnum.ERROR.getCode(), ex.getMessage());
   }
 
 }
