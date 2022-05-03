@@ -16,9 +16,5 @@ public class SysRoleReqDTO extends PageQuery {
   private static final long serialVersionUID = 1L;
 
   private String keyword;
-  /**
-   * 角色启用状态
-   */
-  private Integer enableStatus;
 
 }

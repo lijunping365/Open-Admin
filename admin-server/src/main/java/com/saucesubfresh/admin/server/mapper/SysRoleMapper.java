@@ -28,7 +28,6 @@ public interface SysRoleMapper extends BaseMapper<SysRoleDO> {
 
   default List<SysRoleDO> queryList(Integer total) {
     return selectList(Wrappers.<SysRoleDO>lambdaQuery()
-        .eq(total != null, SysRoleDO::getEnableStatus, CommonStatusEnum.of(total))
         .orderByAsc(SysRoleDO::getSort));
   }
 }

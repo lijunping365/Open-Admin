@@ -27,13 +27,5 @@ public class SysUserRoleCreateDTO implements Serializable {
    *
    */
   private Long roleId;
-  /**
-   * 创建时间
-   */
-  private LocalDateTime createTime;
-  /**
-   * 创建人
-   */
-  private Long createUser;
 
 }

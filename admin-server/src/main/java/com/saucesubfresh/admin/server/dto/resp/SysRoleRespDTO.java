@@ -37,10 +37,6 @@ public class SysRoleRespDTO implements Serializable {
    */
   private Integer sort;
   /**
-   * 角色启用状态
-   */
-  private Integer enableStatus;
-  /**
    * 创建时间
    */
   private LocalDateTime createTime;

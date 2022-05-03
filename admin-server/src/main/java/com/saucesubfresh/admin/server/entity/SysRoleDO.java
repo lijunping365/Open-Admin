@@ -36,9 +36,4 @@ public class SysRoleDO extends BaseDO implements Serializable {
    * 排序字段
    */
   private Integer sort;
-  /**
-   * 菜单状态启用状态（1 启用，0 禁用）
-   */
-  private Integer enableStatus;
-
 }

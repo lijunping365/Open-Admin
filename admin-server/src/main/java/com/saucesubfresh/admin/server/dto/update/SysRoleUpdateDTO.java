@@ -35,25 +35,5 @@ public class SysRoleUpdateDTO implements Serializable {
    * 排序字段
    */
   private Integer sort;
-  /**
-   * 角色启用状态
-   */
-  private Integer enableStatus;
-  /**
-   * 创建时间
-   */
-  private LocalDateTime createTime;
-  /**
-   * 修改时间
-   */
-  private LocalDateTime updateTime;
-  /**
-   * 创建用户
-   */
-  private Long createUser;
-  /**
-   * 修改用户
-   */
-  private Long updateUser;
 
 }

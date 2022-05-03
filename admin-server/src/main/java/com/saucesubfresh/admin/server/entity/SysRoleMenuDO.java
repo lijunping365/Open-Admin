@@ -16,16 +16,21 @@ import java.io.Serializable;
 public class SysRoleMenuDO extends BaseDO implements Serializable {
   private static final long serialVersionUID = 1L;
   /**
-   *
+   * 主键
    */
   @TableId
   private Long id;
   /**
-   *
+   * 角色 id
    */
   private Long roleId;
   /**
-   *
+   * 菜单 id
    */
   private Long menuId;
+
+  /**
+   * 权限，逗号分隔字符串
+   */
+  private String authorities;
 }

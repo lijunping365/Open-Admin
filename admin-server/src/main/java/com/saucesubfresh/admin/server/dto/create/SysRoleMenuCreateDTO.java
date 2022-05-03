@@ -27,13 +27,9 @@ public class SysRoleMenuCreateDTO implements Serializable {
    *
    */
   private Long menuId;
-  /**
-   * 创建时间
-   */
-  private LocalDateTime createTime;
-  /**
-   * 创建人
-   */
-  private Long createUser;
 
+  /**
+   * 权限，逗号分隔字符串
+   */
+  private String authorities;
 }

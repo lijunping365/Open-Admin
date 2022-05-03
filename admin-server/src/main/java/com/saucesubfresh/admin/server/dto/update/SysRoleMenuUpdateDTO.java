@@ -23,4 +23,6 @@ public class SysRoleMenuUpdateDTO implements Serializable {
   @NotEmpty
   private List<Long> menuId;
 
+  private String authorities;
+
 }

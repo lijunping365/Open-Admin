@@ -52,8 +52,9 @@ public class SysMenuDO extends BaseDO implements Serializable {
    * 备注
    */
   private String memo;
+
   /**
-   * 菜单状态启用状态（1 启用，0 禁用）
+   * 权限列表，json 字符串
    */
-  private Integer enableStatus;
+  private String authorities;
 }
