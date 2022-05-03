@@ -3,22 +3,18 @@
 
 <mapper namespace="com.saucesubfresh.admin.server.mapper.SysRoleMenuMapper">
   <select id="queryList" resultType="com.saucesubfresh.admin.server.entity.SysMenuDO">
-
         SELECT sm.* FROM open_admin_role_menu srm
         LEFT JOIN open_admin_menu sm on srm.menu_id = sm.id
         WHERE srm.role_id = #{roleId}
-            AND sm.id IS NOT NULL
+        AND sm.id IS NOT NULL
         GROUP BY sm.id
-
   </select>
 
   <select id="loadRoleMenusByRoleId" resultType="com.saucesubfresh.admin.server.entity.SysMenuDO">
-
         SELECT sm.* FROM open_admin_role_menu srm
         LEFT JOIN open_admin_menu sm on srm.menu_id = sm.id
         WHERE srm.role_id = #{roleId}
-            AND sm.id IS NOT NULL
+        AND sm.id IS NOT NULL
         GROUP BY sm.id
-
   </select>
 </mapper>

@@ -1,9 +1,6 @@
 package com.saucesubfresh.admin.server.controller;
 
 import com.saucesubfresh.admin.common.vo.Result;
-import com.saucesubfresh.admin.server.dto.resp.SysResourceRespDTO;
-import com.saucesubfresh.admin.server.dto.update.SysRoleResourceUpdateDTO;
-import com.saucesubfresh.admin.server.service.SysRoleResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
