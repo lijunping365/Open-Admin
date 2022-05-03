@@ -1,13 +1,10 @@
 package com.saucesubfresh.admin.server.dto.resp;
 
 
-import com.saucesubfresh.admin.server.vo.SysMenuVO;
-import com.saucesubfresh.admin.server.vo.SysResourceVO;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * 角色表
@@ -52,15 +49,5 @@ public class SysRoleRespDTO implements Serializable {
    * 修改用户
    */
   private Long updateUser;
-
-  /**
-   * 菜单列表
-   */
-  private List<SysMenuVO> menus;
-
-  /**
-   * 资源列表
-   */
-  private List<SysResourceVO> resources;
 
 }
