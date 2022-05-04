@@ -5,6 +5,7 @@ import com.saucesubfresh.admin.server.dto.resp.SysMenuRespDTO;
 import com.saucesubfresh.admin.server.dto.update.SysRoleMenuUpdateDTO;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author karong
@@ -27,5 +28,12 @@ public interface SysRoleMenuService {
    * @return
    */
   boolean allocMenu(SysRoleMenuUpdateDTO sysRoleMenuUpdateDTO);
+
+  /**
+   * 通过角色名称获取权限列表
+   * @param roles
+   * @return
+   */
+  Set<String> getAuthorities(List<String> roles);
 }
 

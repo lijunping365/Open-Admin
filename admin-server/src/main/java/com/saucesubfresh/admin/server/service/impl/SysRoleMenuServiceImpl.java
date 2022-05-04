@@ -8,23 +8,17 @@ import com.saucesubfresh.admin.server.entity.SysMenuDO;
 import com.saucesubfresh.admin.server.entity.SysRoleMenuDO;
 import com.saucesubfresh.admin.server.mapper.SysRoleMenuMapper;
 import com.saucesubfresh.admin.server.service.SysRoleMenuService;
-import com.saucesubfresh.starter.security.annotation.PreAuthorization;
-import com.saucesubfresh.starter.security.service.AuthorityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
 
-import static com.saucesubfresh.admin.server.constant.CacheName.MENU_TREE;
-
 
 @Slf4j
 @Service
-public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRoleMenuDO> implements SysRoleMenuService, AuthorityService {
+public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRoleMenuDO> implements SysRoleMenuService{
 
   @Autowired
   private SysRoleMenuMapper sysRoleMenuMapper;
@@ -54,9 +48,8 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
     return true;
   }
 
-
   @Override
-  public Set<String> getAuthorities(List<Long> roleIds) {
+  public Set<String> getAuthorities(List<String> roles) {
     return null;
   }
 }
