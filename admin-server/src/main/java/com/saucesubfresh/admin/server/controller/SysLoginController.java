@@ -5,7 +5,7 @@ import com.saucesubfresh.admin.common.vo.Result;
 import com.saucesubfresh.admin.server.dto.req.SysMobileLoginRequest;
 import com.saucesubfresh.admin.server.dto.req.SysPasswordLoginRequest;
 import com.saucesubfresh.starter.captcha.exception.ValidateCodeException;
-import com.saucesubfresh.starter.captcha.processor.CaptchaProcessor;
+import com.saucesubfresh.starter.captcha.processor.CaptchaVerifyProcessor;
 import com.saucesubfresh.starter.captcha.request.CaptchaVerifyRequest;
 import com.saucesubfresh.starter.oauth.core.password.PasswordAuthenticationProcessor;
 import com.saucesubfresh.starter.oauth.core.sms.SmsMobileAuthenticationProcessor;
@@ -14,7 +14,6 @@ import com.saucesubfresh.starter.oauth.request.MobileLoginRequest;
 import com.saucesubfresh.starter.oauth.request.PasswordLoginRequest;
 import com.saucesubfresh.starter.oauth.token.AccessToken;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,14 +31,17 @@ import javax.validation.Valid;
 @RequestMapping("/login")
 public class SysLoginController {
 
-    @Autowired
-    private CaptchaProcessor captchaProcessor;
+    private final CaptchaVerifyProcessor captchaVerifyProcessor;
+    private final PasswordAuthenticationProcessor passwordAuthentication;
+    private final SmsMobileAuthenticationProcessor smsMobileAuthentication;
 
-    @Autowired
-    private PasswordAuthenticationProcessor passwordAuthentication;
-
-    @Autowired
-    private SmsMobileAuthenticationProcessor smsMobileAuthentication;
+    public SysLoginController(CaptchaVerifyProcessor captchaVerifyProcessor,
+                              PasswordAuthenticationProcessor passwordAuthentication,
+                              SmsMobileAuthenticationProcessor smsMobileAuthentication) {
+        this.captchaVerifyProcessor = captchaVerifyProcessor;
+        this.passwordAuthentication = passwordAuthentication;
+        this.smsMobileAuthentication = smsMobileAuthentication;
+    }
 
     /**
      * 用户名密码登录
@@ -52,7 +54,7 @@ public class SysLoginController {
                 .setRequestId(request.getDeviceId())
                 .setCode(request.getCaptcha());
         try {
-            captchaProcessor.validate(captchaVerifyRequest);
+            captchaVerifyProcessor.validate(captchaVerifyRequest);
         } catch (ValidateCodeException e){
             throw new ControllerException(e.getMessage());
         }
@@ -79,7 +81,7 @@ public class SysLoginController {
                 .setRequestId(request.getDeviceId())
                 .setCode(request.getCaptcha());
         try {
-            captchaProcessor.validate(captchaVerifyRequest);
+            captchaVerifyProcessor.validate(captchaVerifyRequest);
         } catch (ValidateCodeException e){
             throw new ControllerException(e.getMessage());
         }
@@ -92,6 +94,4 @@ public class SysLoginController {
             throw new ControllerException(e.getCode(), e.getMessage());
         }
     }
-
-
 }
