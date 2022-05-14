@@ -58,9 +58,6 @@ public class SysMenuController {
     return Result.succeed(sysMenuService.delete(id));
   }
 
-  /**
-   * 获取后台管理员菜单树
-   */
   @GetMapping("/tree")
   public Result<List<MenuTreeVO>> getMenuTree() {
     return Result.succeed(sysMenuService.getMenuTree(UserSecurityContextHolder.getUserId()));

@@ -6,6 +6,7 @@ import com.saucesubfresh.starter.security.context.UserSecurityContextHolder;
 import com.saucesubfresh.starter.security.enums.SecurityExceptionEnum;
 import com.saucesubfresh.starter.security.exception.SecurityException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.CollectionUtils;
@@ -25,8 +26,15 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     @Autowired
     private SysRoleMenuService roleMenuService;
 
+    @Value("#{'${com.saucesubfresh.security.white-paths:}'.split(',')}")
+    private Set<String> whitePaths;
+
     @Override
     public boolean handler(HttpServletRequest request, Object o) throws SecurityException {
+        if (matcher(request, whitePaths)){
+            return Boolean.TRUE;
+        }
+
         Set<String> authorities;
         try {
             List<String> roles = UserSecurityContextHolder.getContext().getAuthorities();

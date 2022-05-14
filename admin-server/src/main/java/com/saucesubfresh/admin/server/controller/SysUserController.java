@@ -57,6 +57,4 @@ public class SysUserController {
   public Result<SysUserRespDTO> saveUser(@RequestBody @Valid SysUserCreateDTO sysUserCreateDTO) {
     return Result.succeed(sysUserService.saveUser(sysUserCreateDTO));
   }
-
-
 }
