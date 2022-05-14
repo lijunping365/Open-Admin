@@ -21,13 +21,8 @@ public interface SysMenuMapper extends BaseMapper<SysMenuDO> {
 
   List<SysMenuDO> getMenuList(Long userId);
 
-  default Page<SysMenuDO> queryPage(SysMenuReqDTO sysMenuReqDTO) {
-    return selectPage(sysMenuReqDTO.page(), Wrappers.<SysMenuDO>lambdaQuery()
-        .like(sysMenuReqDTO.getName() != null, SysMenuDO::getName, sysMenuReqDTO.getName()));
-  }
-
-  default List<SysMenuDO> queryList(Integer total) {
+  default List<SysMenuDO> queryList(SysMenuReqDTO sysMenuReqDTO) {
     return selectList(Wrappers.<SysMenuDO>lambdaQuery()
-        .orderByAsc(SysMenuDO::getSort));
+        .like(sysMenuReqDTO.getName() != null, SysMenuDO::getName, sysMenuReqDTO.getName()));
   }
 }

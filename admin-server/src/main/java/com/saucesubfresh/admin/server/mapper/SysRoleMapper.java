@@ -30,4 +30,8 @@ public interface SysRoleMapper extends BaseMapper<SysRoleDO> {
     return selectList(Wrappers.<SysRoleDO>lambdaQuery()
         .orderByAsc(SysRoleDO::getSort));
   }
+
+  default List<SysRoleDO> queryListByRoleName(List<String> roleNames){
+    return selectList(Wrappers.<SysRoleDO>lambdaQuery().in(SysRoleDO::getName, roleNames));
+  }
 }

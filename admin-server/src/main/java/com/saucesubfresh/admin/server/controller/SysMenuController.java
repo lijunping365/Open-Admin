@@ -34,7 +34,7 @@ public class SysMenuController {
   private SysMenuService sysMenuService;
 
   @GetMapping("/page")
-  public Result<PageResult<SysMenuRespDTO>> list(SysMenuReqDTO sysMenuReqDTO) {
+  public Result<PageResult<SysMenuRespDTO>> page(SysMenuReqDTO sysMenuReqDTO) {
     return Result.succeed(sysMenuService.selectPage(sysMenuReqDTO));
   }
 

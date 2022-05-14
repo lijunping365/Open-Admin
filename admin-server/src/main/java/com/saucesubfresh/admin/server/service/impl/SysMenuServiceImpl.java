@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.saucesubfresh.admin.server.constant.CacheName.MENU_TREE;
 
@@ -43,9 +44,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuDO> im
 
   @Override
   public PageResult<SysMenuRespDTO> selectPage(SysMenuReqDTO sysMenuReqDTO) {
-    Page<SysMenuDO> page = sysMenuMapper.queryPage(sysMenuReqDTO);
-    IPage<SysMenuRespDTO> convert = page.convert(SysMenuConvert.INSTANCE::convert);
-    return PageResult.build(convert);
+    List<SysMenuDO> menuList = sysMenuMapper.queryList(sysMenuReqDTO);
+    List<SysMenuRespDTO> menuRespDTOS = SysMenuConvert.INSTANCE.convertList(menuList);
+    long count = menuRespDTOS.stream().filter(e -> Objects.equals(e.getLevel(), 1)).count();
+    menuRespDTOS = new TreeUtils<SysMenuRespDTO>().buildTree(menuRespDTOS);
+    return PageResult.build(menuRespDTOS, count, sysMenuReqDTO.getCurrent(), sysMenuReqDTO.getPageSize());
   }
 
   @Override

@@ -5,15 +5,18 @@ import com.saucesubfresh.admin.server.convert.SysMenuConvert;
 import com.saucesubfresh.admin.server.dto.resp.SysMenuRespDTO;
 import com.saucesubfresh.admin.server.dto.update.SysRoleMenuUpdateDTO;
 import com.saucesubfresh.admin.server.entity.SysMenuDO;
+import com.saucesubfresh.admin.server.entity.SysRoleDO;
 import com.saucesubfresh.admin.server.entity.SysRoleMenuDO;
+import com.saucesubfresh.admin.server.mapper.SysRoleMapper;
 import com.saucesubfresh.admin.server.mapper.SysRoleMenuMapper;
 import com.saucesubfresh.admin.server.service.SysRoleMenuService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -22,6 +25,9 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
 
   @Autowired
   private SysRoleMenuMapper sysRoleMenuMapper;
+
+  @Autowired
+  private SysRoleMapper sysRoleMapper;
 
   @Override
   public List<SysMenuRespDTO> listMenu(Long roleId) {
@@ -49,7 +55,18 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
   }
 
   @Override
-  public Set<String> getAuthorities(List<String> roles) {
-    return null;
+  public Set<String> getAuthorities(List<String> roleNames) {
+    List<SysRoleDO> sysRoleDOS = sysRoleMapper.queryListByRoleName(roleNames);
+    List<Long> roleIds = sysRoleDOS.stream().map(SysRoleDO::getId).collect(Collectors.toList());
+    List<SysRoleMenuDO> sysRoleMenuDOS = sysRoleMenuMapper.queryListByRoleId(roleIds);
+    List<String> authorities = sysRoleMenuDOS.stream().map(SysRoleMenuDO::getAuthorities).collect(Collectors.toList());
+    Set<String> authoritiesSet = new HashSet<>();
+    authorities.forEach(e-> {
+      if (StringUtils.isBlank(e)){
+        return;
+      }
+      authoritiesSet.addAll(Set.of(e.split(",")));
+    });
+    return authoritiesSet;
   }
 }

@@ -18,4 +18,7 @@ mybatis-plus:
     db-config:
       id-type: auto
 
-debug: true
+logging:
+  level:
+    com.saucesubfresh: INFO
+

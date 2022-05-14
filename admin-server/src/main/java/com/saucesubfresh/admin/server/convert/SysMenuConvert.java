@@ -38,8 +38,6 @@ public interface SysMenuConvert {
   List<SysMenuRespDTO> convertList(List<SysMenuDO> sysMenuDOList);
 
   List<MenuTreeVO> convertListVO(List<SysMenuDO> menuList);
-
-  List<SysMenuVO> convertList2(List<SysMenuDO> menuDOS);
 }
 
 

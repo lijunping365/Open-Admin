@@ -28,7 +28,6 @@ public class SysRoleMenuDO extends BaseDO implements Serializable {
    * 菜单 id
    */
   private Long menuId;
-
   /**
    * 权限，逗号分隔字符串
    */

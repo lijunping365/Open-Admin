@@ -25,4 +25,8 @@ public interface SysRoleMenuMapper extends BaseMapper<SysRoleMenuDO> {
   }
 
   List<SysMenuDO> loadRoleMenusByRoleId(Long roleId);
+
+  default List<SysRoleMenuDO> queryListByRoleId(List<Long> roleIds){
+    return selectList(Wrappers.<SysRoleMenuDO>lambdaQuery().in(SysRoleMenuDO::getRoleId, roleIds));
+  }
 }

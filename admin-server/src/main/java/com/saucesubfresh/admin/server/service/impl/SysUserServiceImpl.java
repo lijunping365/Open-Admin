@@ -17,7 +17,9 @@ import com.saucesubfresh.starter.oauth.service.UserDetailService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +49,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
   public SysUserRespDTO loadUserByUserId(Long userId) {
     SysUserDO sysUserDO = sysUserMapper.loadUserByUserId(userId);
     SysUserRespDTO sysUserRespDTO = SysUserConvert.INSTANCE.convert(sysUserDO);
-    return mapUserRoles(sysUserRespDTO);
+    sysUserRespDTO.setAuthorities(getUserRoles(sysUserDO.getId()));
+    return sysUserRespDTO;
   }
 
   @Override
@@ -55,7 +58,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
     SysUserDO sysUserDO = SysUserConvert.INSTANCE.convert(sysUserCreateDTO);
     sysUserMapper.saveUser(sysUserDO);
     SysUserRespDTO sysUserRespDTO = SysUserConvert.INSTANCE.convert(sysUserDO);
-    return mapUserRoles(sysUserRespDTO);
+    sysUserRespDTO.setAuthorities(getUserRoles(sysUserDO.getId()));
+    return sysUserRespDTO;
   }
 
   @Override
@@ -70,16 +74,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
     return null;
   }
 
-  private SysUserRespDTO mapUserRoles(SysUserRespDTO sysUserRespDTO) {
-    if (sysUserRespDTO == null) {
-      return null;
+  private List<String> getUserRoles(Long userId) {
+    List<SysRoleDO> sysRoleDOList = sysUserRoleMapper.loadUserRolesByUserId(userId);
+    if (CollectionUtils.isEmpty(sysRoleDOList)) {
+      return Collections.emptyList();
     }
-    List<SysRoleDO> sysRoleDOList = sysUserRoleMapper.loadUserRolesByUserId(sysUserRespDTO.getId());
-    if (sysRoleDOList != null && sysRoleDOList.size() != 0) {
-      List<String> authorities = sysRoleDOList.stream().filter(e -> StringUtils.isNotBlank(e.getName())).map(SysRoleDO::getName).collect(Collectors.toList());
-      sysUserRespDTO.setAuthorities(authorities);
-    }
-    return sysUserRespDTO;
+    return sysRoleDOList.stream().filter(e -> StringUtils.isNotBlank(e.getName())).map(SysRoleDO::getName).collect(Collectors.toList());
   }
 
   private UserDetails convert(SysUserDO sysUserDO){
@@ -89,6 +89,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
     userDetails.setPassword(sysUserDO.getPassword());
     userDetails.setMobile(sysUserDO.getMobile());
     userDetails.setAccountLocked(sysUserDO.getAccountStatus() != 1);
+    userDetails.setAuthorities(getUserRoles(sysUserDO.getId()));
     return userDetails;
   }
 }
