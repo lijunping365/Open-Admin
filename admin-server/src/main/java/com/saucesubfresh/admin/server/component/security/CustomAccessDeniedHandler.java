@@ -7,10 +7,11 @@ import com.saucesubfresh.starter.security.enums.SecurityExceptionEnum;
 import com.saucesubfresh.starter.security.exception.SecurityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.server.PathContainer;
 import org.springframework.stereotype.Component;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.PathMatcher;
+import org.springframework.web.util.pattern.PathPattern;
+import org.springframework.web.util.pattern.PathPatternParser;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -50,11 +51,10 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     }
 
     private boolean matcher(HttpServletRequest request, Set<String> paths){
-        PathMatcher pathMatcher = new AntPathMatcher();
-        String requestURI = request.getRequestURI();
+        PathPattern pattern = PathPatternParser.defaultInstance.parse(request.getRequestURI());
         boolean match = false;
         for (String path : paths) {
-            if (pathMatcher.match(path, requestURI)) {
+            if (pattern.matches(PathContainer.parsePath(path))) {
                 match = true;
             }
         }
