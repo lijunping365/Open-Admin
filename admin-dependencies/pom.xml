@@ -30,9 +30,9 @@
 
         <!-- RPC 相关依赖 -->
         <dubbo.version>3.0.2</dubbo.version>
-        <open-starter-captcha.version>1.0.2</open-starter-captcha.version>
-        <open-starter-oauth.version>1.0.2</open-starter-oauth.version>
-        <open-starter-security.version>1.0.2</open-starter-security.version>
+        <open-starter-captcha.version>1.0.3</open-starter-captcha.version>
+        <open-starter-oauth.version>1.0.3</open-starter-oauth.version>
+        <open-starter-security.version>1.0.3</open-starter-security.version>
 
         <!-- 第三方依赖版本 -->
         <!-- mybatis-plus -->
