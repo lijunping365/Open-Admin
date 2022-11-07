@@ -1,9 +1,10 @@
 package com.saucesubfresh.admin.server.component.security;
 
+import com.saucesubfresh.admin.common.vo.ResultEnum;
 import com.saucesubfresh.admin.server.service.SysRoleMenuService;
 import com.saucesubfresh.starter.security.authorization.AccessDeniedHandler;
 import com.saucesubfresh.starter.security.context.UserSecurityContextHolder;
-import com.saucesubfresh.starter.security.enums.SecurityExceptionEnum;
+import com.saucesubfresh.starter.security.exception.AccessDeniedException;
 import com.saucesubfresh.starter.security.exception.SecurityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,11 +42,11 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
             List<String> roles = UserSecurityContextHolder.getContext().getAuthorities();
             authorities = roleMenuService.getAuthorities(roles);
         }catch (Exception e){
-            throw new SecurityException(SecurityExceptionEnum.FORBIDDEN.getCode(), e.getMessage());
+            throw new AccessDeniedException(ResultEnum.FORBIDDEN.getMsg());
         }
 
         if (CollectionUtils.isEmpty(authorities) || !matcher(request, authorities)) {
-            throw new SecurityException(SecurityExceptionEnum.FORBIDDEN);
+            throw new AccessDeniedException(ResultEnum.FORBIDDEN.getMsg());
         }
         return Boolean.TRUE;
     }

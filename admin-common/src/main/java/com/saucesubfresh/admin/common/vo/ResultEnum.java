@@ -2,21 +2,25 @@ package com.saucesubfresh.admin.common.vo;
 
 /**
  * 结果枚举
- * 全局错误码，占用 [0, 999]
- * 业务异常错误码，占用 [1 000 000 000, +∞)
  *
  * @author lijunping
  */
 public enum ResultEnum {
 
-  SUCCESS(200, "成功"),
+  SUCCESS(200, "成功"), UNAUTHORIZED(401, "认证失败"), FORBIDDEN(403, "权限不足，无法访问"),
 
-  ERROR(1000, "系统异常"),
+  BUSINESS_EXCEPTION("业务异常"), USERNAME_OR_PASSWORD_ERROR("用户名或密码错误"),
+
   ;
 
   private final Integer code;
 
   private final String msg;
+
+  ResultEnum(String msg) {
+    this.code = 1000;
+    this.msg = msg;
+  }
 
   ResultEnum(Integer code, String msg) {
     this.code = code;

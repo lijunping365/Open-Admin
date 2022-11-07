@@ -6,13 +6,10 @@ import com.saucesubfresh.admin.common.exception.ControllerException;
 import com.saucesubfresh.admin.common.exception.ServiceException;
 import com.saucesubfresh.admin.common.vo.Result;
 import com.saucesubfresh.admin.common.vo.ResultEnum;
-import com.saucesubfresh.starter.captcha.exception.ValidateCodeException;
-import com.saucesubfresh.starter.oauth.exception.AuthenticationException;
+import com.saucesubfresh.starter.security.exception.AccessDeniedException;
 import com.saucesubfresh.starter.security.exception.SecurityException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -23,13 +20,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -99,46 +92,6 @@ public class GlobalExceptionHandler {
   }
 
   /**
-   * 处理 SpringMVC 参数绑定不正确，本质上也是通过 Validator 校验
-   */
-  @ExceptionHandler(BindException.class)
-  public Result<Object> bind(BindException ex) {
-    log.warn("[bindExceptionHandler]", ex);
-    List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
-
-    Map<String, String> errors = fieldErrors.stream()
-            .map(fieldError -> Collections.singletonMap(fieldError.getField(), fieldError.getDefaultMessage()))
-            .flatMap(stringStringMap -> stringStringMap.entrySet().stream())
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-    String msg = fieldErrors.stream()
-            .map(fieldError -> fieldError.getField() + ":" + fieldError.getDefaultMessage())
-            .collect(Collectors.joining(";"));
-
-    return Result.failed(errors, HttpStatus.BAD_REQUEST.value(), String.format("请求参数不正确:%s", msg));
-  }
-
-  /**
-   * 处理 Validator 校验不通过产生的异常
-   */
-  @ExceptionHandler(ConstraintViolationException.class)
-  public Result<Object> validate(ConstraintViolationException ex) {
-    log.warn("[constraintViolationExceptionHandler]", ex);
-    Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
-
-    String msg = constraintViolations.stream()
-            .map(constraintViolation -> constraintViolation.getPropertyPath().toString() + ":" + constraintViolation.getInvalidValue() + ":" + constraintViolation.getMessage())
-            .collect(Collectors.joining(";"));
-
-    Map<Object, String> collect = constraintViolations.stream()
-            .map(constraintViolation -> Collections.singletonMap(constraintViolation.getInvalidValue(), constraintViolation.getMessage()))
-            .flatMap(objectStringMap -> objectStringMap.entrySet().stream())
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-    return Result.failed(collect, HttpStatus.BAD_REQUEST.value(), String.format("请求参数不正确:%s", msg));
-  }
-
-  /**
    * 处理 SpringMVC 请求方法不正确
    * <p>
    * 例如说，A 接口的方法为 GET 方式，结果请求方法为 POST 方式，导致不匹配
@@ -149,36 +102,24 @@ public class GlobalExceptionHandler {
     return Result.failed(HttpStatus.BAD_REQUEST.value(), String.format("请求方法不正确:%s", ex.getMessage()));
   }
 
-  /**
-   * 处理业务异常 ServiceException
-   */
   @ExceptionHandler({ServiceException.class})
   public Result<Object> serviceException(ServiceException ex) {
     log.warn("[serviceExceptionHandler]", ex);
     return Result.failed(ex.getCode(), ex.getMessage());
   }
 
-  /**
-   * 处理业务异常 ControllerException
-   */
   @ExceptionHandler({ControllerException.class})
   public Result<Object> controllerException(ControllerException ex) {
     log.warn("[controllerExceptionHandler]", ex);
     return Result.failed(ex.getCode(), ex.getMessage());
   }
 
-  /**
-   * 处理基础异常 BaseException
-   */
   @ExceptionHandler({BaseException.class})
   public Result<Object> baseException(BaseException ex) {
     log.warn("[baseExceptionHandler]", ex);
     return Result.failed(ex.getCode(), ex.getMessage());
   }
 
-  /**
-   * 处理基础异常 BaseCheckedException
-   */
   @ExceptionHandler({BaseCheckedException.class})
   public Result<Object> baseCheckedException(BaseCheckedException ex) {
     log.warn("[baseCheckedExceptionHandler]", ex);
@@ -188,37 +129,28 @@ public class GlobalExceptionHandler {
   @ExceptionHandler({SecurityException.class})
   public Result<Object> securityException(SecurityException ex) {
     log.warn("[securityException]", ex);
-    return Result.failed(ResultEnum.ERROR.getCode(), ex.getMessage());
-  }
-
-  @ExceptionHandler({ValidateCodeException.class})
-  public Result<Object> validateCodeException(ValidateCodeException ex) {
-    log.warn("[validateCodeException]", ex);
-    return Result.failed(ResultEnum.ERROR.getCode(), ex.getMessage());
-  }
-
-  @ExceptionHandler({AuthenticationException.class})
-  public Result<Object> authenticationException(AuthenticationException ex) {
-    log.warn("[AuthenticationException]", ex);
-    return Result.failed(ResultEnum.ERROR.getCode(), ex.getMessage());
+    if (ex instanceof AccessDeniedException){
+      return Result.failed(ResultEnum.FORBIDDEN.getCode(), ex.getMessage());
+    }
+    return Result.failed(ResultEnum.UNAUTHORIZED.getCode(), ex.getMessage());
   }
 
   @ExceptionHandler({RuntimeException.class})
   public Result<Object> runtime(RuntimeException ex) {
     log.warn("[runtimeExceptionHandler]", ex);
-    return Result.failed(ResultEnum.ERROR.getCode(), ex.getMessage());
+    return Result.failed(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
   }
 
   @ExceptionHandler({Exception.class})
   public Result<Object> exception(Exception ex) {
     log.warn("[exceptionHandler]", ex);
-    return Result.failed(ResultEnum.ERROR.getCode(), ex.getMessage());
+    return Result.failed(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
   }
 
   @ExceptionHandler({Throwable.class})
   public Result<Object> error(Throwable ex) {
     log.warn("[throwableHandler]", ex);
-    return Result.failed(ResultEnum.ERROR.getCode(), ex.getMessage());
+    return Result.failed(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
   }
 
 }
