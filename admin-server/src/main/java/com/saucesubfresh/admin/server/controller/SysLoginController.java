@@ -1,7 +1,7 @@
 package com.saucesubfresh.admin.server.controller;
 
-import com.saucesubfresh.admin.common.exception.ControllerException;
 import com.saucesubfresh.admin.common.vo.Result;
+import com.saucesubfresh.admin.common.vo.ResultEnum;
 import com.saucesubfresh.admin.server.dto.req.SysMobileLoginRequest;
 import com.saucesubfresh.admin.server.dto.req.SysPasswordLoginRequest;
 import com.saucesubfresh.starter.captcha.exception.ValidateCodeException;
@@ -10,6 +10,7 @@ import com.saucesubfresh.starter.captcha.request.CaptchaVerifyRequest;
 import com.saucesubfresh.starter.oauth.core.password.PasswordAuthenticationProcessor;
 import com.saucesubfresh.starter.oauth.core.sms.SmsMobileAuthenticationProcessor;
 import com.saucesubfresh.starter.oauth.exception.AuthenticationException;
+import com.saucesubfresh.starter.oauth.exception.UsernameNotFoundException;
 import com.saucesubfresh.starter.oauth.request.MobileLoginRequest;
 import com.saucesubfresh.starter.oauth.request.PasswordLoginRequest;
 import com.saucesubfresh.starter.oauth.token.AccessToken;
@@ -56,7 +57,7 @@ public class SysLoginController {
         try {
             captchaVerifyProcessor.validate(captchaVerifyRequest);
         } catch (ValidateCodeException e){
-            throw new ControllerException(e.getMessage());
+            return Result.failed(e.getMessage());
         }
 
         PasswordLoginRequest passwordLoginRequest = new PasswordLoginRequest()
@@ -66,7 +67,10 @@ public class SysLoginController {
             final AccessToken accessToken = passwordAuthentication.authentication(passwordLoginRequest);
             return Result.succeed(accessToken);
         } catch (AuthenticationException e){
-            throw new ControllerException(e.getCode(), e.getMessage());
+            if(e instanceof UsernameNotFoundException){
+                return Result.failed(ResultEnum.USERNAME_OR_PASSWORD_ERROR.getMsg());
+            }
+            return Result.failed(e.getMessage());
         }
     }
 
@@ -83,7 +87,7 @@ public class SysLoginController {
         try {
             captchaVerifyProcessor.validate(captchaVerifyRequest);
         } catch (ValidateCodeException e){
-            throw new ControllerException(e.getMessage());
+            return Result.failed(e.getMessage());
         }
 
         MobileLoginRequest mobileLoginRequest = new MobileLoginRequest().setMobile(request.getMobile());
@@ -91,7 +95,7 @@ public class SysLoginController {
             final AccessToken accessToken = smsMobileAuthentication.authentication(mobileLoginRequest);
             return Result.succeed(accessToken);
         } catch (AuthenticationException e){
-            throw new ControllerException(e.getCode(), e.getMessage());
+            return Result.failed(e.getMessage());
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.saucesubfresh.admin.server.controller;
 
-import com.saucesubfresh.admin.common.exception.ControllerException;
 import com.saucesubfresh.admin.common.vo.Result;
 import com.saucesubfresh.admin.server.dto.create.SysCaptchaRespDTO;
 import com.saucesubfresh.admin.server.dto.req.SysCaptchaReqDTO;
@@ -38,8 +37,8 @@ public class SysCaptchaController {
     private final MathImageCodeGenerator mathImageCodeGenerator;
 
     public SysCaptchaController(ImageCodeGenerator imageCodeGenerator,
-                                    SmsCodeGenerator smsCodeGenerator,
-                                    MathImageCodeGenerator mathImageCodeGenerator) {
+                                SmsCodeGenerator smsCodeGenerator,
+                                MathImageCodeGenerator mathImageCodeGenerator) {
         this.imageCodeGenerator = imageCodeGenerator;
         this.smsCodeGenerator = smsCodeGenerator;
         this.mathImageCodeGenerator = mathImageCodeGenerator;
@@ -54,7 +53,7 @@ public class SysCaptchaController {
             return Result.succeed(convert(imageValidateCode));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new ControllerException(e.getMessage());
+            return Result.failed(e.getMessage());
         }
     }
 
@@ -66,8 +65,7 @@ public class SysCaptchaController {
             ImageValidateCode imageValidateCode = imageCodeGenerator.create(captchaGenerateRequest);
             return Result.succeed(convert(imageValidateCode));
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new ControllerException(e.getMessage());
+            return Result.failed(e.getMessage());
         }
     }
 
@@ -80,11 +78,11 @@ public class SysCaptchaController {
             ValidateCode validateCode = smsCodeGenerator.create(captchaGenerateRequest);
             crawlerCaptchaRespDTO.setSuccess(true);
             log.info("向手机号: {}发送短信验证码: {}", request.getMobile(), validateCode.getCode());
+            return Result.succeed(crawlerCaptchaRespDTO);
         } catch (ValidateCodeException e) {
             log.error(e.getMessage(), e);
-            throw new ControllerException(e.getMessage());
+            return Result.failed(e.getMessage());
         }
-        return Result.succeed(crawlerCaptchaRespDTO);
     }
 
     private SysCaptchaRespDTO convert(ImageValidateCode imageValidateCode) throws IOException {

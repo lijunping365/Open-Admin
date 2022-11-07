@@ -1,8 +1,5 @@
 package com.saucesubfresh.admin.server.config;
 
-import com.saucesubfresh.admin.common.exception.BaseCheckedException;
-import com.saucesubfresh.admin.common.exception.BaseException;
-import com.saucesubfresh.admin.common.exception.ControllerException;
 import com.saucesubfresh.admin.common.exception.ServiceException;
 import com.saucesubfresh.admin.common.vo.Result;
 import com.saucesubfresh.admin.common.vo.ResultEnum;
@@ -105,24 +102,6 @@ public class GlobalExceptionHandler {
   @ExceptionHandler({ServiceException.class})
   public Result<Object> serviceException(ServiceException ex) {
     log.warn("[serviceExceptionHandler]", ex);
-    return Result.failed(ex.getCode(), ex.getMessage());
-  }
-
-  @ExceptionHandler({ControllerException.class})
-  public Result<Object> controllerException(ControllerException ex) {
-    log.warn("[controllerExceptionHandler]", ex);
-    return Result.failed(ex.getCode(), ex.getMessage());
-  }
-
-  @ExceptionHandler({BaseException.class})
-  public Result<Object> baseException(BaseException ex) {
-    log.warn("[baseExceptionHandler]", ex);
-    return Result.failed(ex.getCode(), ex.getMessage());
-  }
-
-  @ExceptionHandler({BaseCheckedException.class})
-  public Result<Object> baseCheckedException(BaseCheckedException ex) {
-    log.warn("[baseCheckedExceptionHandler]", ex);
     return Result.failed(ex.getCode(), ex.getMessage());
   }
 
