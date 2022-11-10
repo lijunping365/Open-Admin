@@ -24,6 +24,7 @@ import com.saucesubfresh.starter.oauth.service.UserDetailService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -86,8 +87,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
   @Override
   public List<MenuTreeVO> getMenuTree(Long userId) {
     SysUserDO sysUserDO = sysUserMapper.selectById(userId);
-    List<String> roles = Arrays.asList(StringUtils.split(sysUserDO.getRoles(), ","));
-    List<SysMenuDO> sysMenuDOS = getMenusList(roles);
+    List<SysMenuDO> sysMenuDOS = getMenusList(sysUserDO.getRoles());
     List<MenuTreeVO> menuTree = SysMenuConvert.INSTANCE.convertListVO(sysMenuDOS);
     menuTree = new TreeUtils<MenuTreeVO>().buildTree(menuTree);
     return menuTree;
@@ -103,25 +103,33 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
    * @return
    */
   private UserDetails convert(SysUserDO sysUserDO){
-    List<String> roles = Arrays.asList(StringUtils.split(sysUserDO.getRoles(), ","));
-    final List<SysMenuDO> sysMenuDOS = getMenusList(roles);
-    List<String> authoritiesList = new ArrayList<>();
-    sysMenuDOS.forEach(e->{
-      List<String> authorities = Arrays.asList(StringUtils.split(e.getAuthorities(), ","));
-      authoritiesList.addAll(authorities);
-    });
     UserDetails userDetails = new UserDetails();
     userDetails.setId(sysUserDO.getId());
     userDetails.setUsername(sysUserDO.getUsername());
     userDetails.setPassword(sysUserDO.getPassword());
     userDetails.setMobile(sysUserDO.getMobile());
     userDetails.setAccountLocked(sysUserDO.getAccountStatus() != 1);
-    userDetails.setAuthorities(authoritiesList);
+    String roles = sysUserDO.getRoles();
+    List<SysMenuDO> sysMenuDOS = getMenusList(roles);
+    if (!CollectionUtils.isEmpty(sysMenuDOS)){
+      List<String> authoritiesList = new ArrayList<>();
+      sysMenuDOS.forEach(e->{
+        String authorities = e.getAuthorities();
+        if (StringUtils.isNotBlank(authorities)){
+          authoritiesList.addAll(Arrays.asList(authorities.split(",")));
+        }
+      });
+      userDetails.setAuthorities(authoritiesList);
+    }
     return userDetails;
   }
 
-  private List<SysMenuDO> getMenusList(List<String> roles){
-    List<SysRoleDO> roleDOS = sysRoleMapper.selectBatchIds(roles);
+  private List<SysMenuDO> getMenusList(String roles){
+    if (StringUtils.isBlank(roles)){
+      return Collections.emptyList();
+    }
+
+    List<SysRoleDO> roleDOS = sysRoleMapper.selectBatchIds(Arrays.asList(roles.split(",")));
     Set<String> menuIdSet = new HashSet<>();
     roleDOS.forEach(e->{
       List<String> menuIds = Arrays.asList(StringUtils.split(e.getAuthorities(), ","));
