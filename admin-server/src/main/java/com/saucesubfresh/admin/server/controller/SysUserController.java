@@ -4,10 +4,10 @@ import com.saucesubfresh.admin.common.vo.PageResult;
 import com.saucesubfresh.admin.common.vo.Result;
 import com.saucesubfresh.admin.server.dto.create.SysUserCreateDTO;
 import com.saucesubfresh.admin.server.dto.req.SysUserReqDTO;
-import com.saucesubfresh.admin.server.dto.resp.SysMenuRespDTO;
 import com.saucesubfresh.admin.server.dto.resp.SysUserRespDTO;
 import com.saucesubfresh.admin.server.dto.update.SysUserUpdateDTO;
 import com.saucesubfresh.admin.server.service.SysUserService;
+import com.saucesubfresh.admin.server.vo.MenuTreeVO;
 import com.saucesubfresh.starter.security.context.UserSecurityContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,8 +76,8 @@ public class SysUserController {
    * @return
    */
   @GetMapping("/getMenus")
-  public Result<List<SysMenuRespDTO>> getMenus() {
+  public Result<List<MenuTreeVO>> getMenus() {
     Long userId = UserSecurityContextHolder.getUserId();
-    return Result.succeed(sysUserService.getMenus(userId));
+    return Result.succeed(sysUserService.getMenuTree(userId));
   }
 }

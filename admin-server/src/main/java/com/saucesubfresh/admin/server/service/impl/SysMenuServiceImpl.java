@@ -1,7 +1,6 @@
 package com.saucesubfresh.admin.server.service.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.saucesubfresh.admin.common.tree.TreeUtils;
 import com.saucesubfresh.admin.common.vo.PageResult;
@@ -16,15 +15,10 @@ import com.saucesubfresh.admin.server.service.SysMenuService;
 import com.saucesubfresh.admin.server.vo.MenuTreeVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
-
-import static com.saucesubfresh.admin.server.constant.CacheName.MENU_TREE;
 
 
 @Slf4j
@@ -35,8 +29,8 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuDO> im
   private SysMenuMapper sysMenuMapper;
 
   @Override
-  public List<MenuTreeVO> getMenuTree(Long userId) {
-    List<SysMenuDO> menuList = sysMenuMapper.getMenuList(userId);
+  public List<MenuTreeVO> getMenuTree() {
+    List<SysMenuDO> menuList = sysMenuMapper.selectList(Wrappers.lambdaQuery());
     List<MenuTreeVO> menuTree = SysMenuConvert.INSTANCE.convertListVO(menuList);
     menuTree = new TreeUtils<MenuTreeVO>().buildTree(menuTree);
     return menuTree;
@@ -58,28 +52,25 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenuDO> im
   }
 
   @Override
-  public boolean save(SysMenuCreateDTO sysMenuCreateDTO) {
+  public void save(SysMenuCreateDTO sysMenuCreateDTO) {
     if (sysMenuCreateDTO.getPid() != null && !sysMenuCreateDTO.getPid().equals(0L)) {
       SysMenuDO sysMenuDO = sysMenuMapper.selectById(sysMenuCreateDTO.getPid());
       sysMenuCreateDTO.setLevel(sysMenuDO.getLevel() + 1);
     }
     sysMenuMapper.insert(SysMenuConvert.INSTANCE.convert(sysMenuCreateDTO));
-    return true;
   }
 
   @Override
-  public boolean update(SysMenuUpdateDTO sysMenuUpdateDTO) {
+  public void update(SysMenuUpdateDTO sysMenuUpdateDTO) {
     if (sysMenuUpdateDTO.getPid() != null && !sysMenuUpdateDTO.getPid().equals(0L)) {
       SysMenuDO sysMenuDO = sysMenuMapper.selectById(sysMenuUpdateDTO.getPid());
       sysMenuUpdateDTO.setLevel(sysMenuDO.getLevel() + 1);
     }
     sysMenuMapper.updateById(SysMenuConvert.INSTANCE.convert(sysMenuUpdateDTO));
-    return true;
   }
 
   @Override
-  public boolean delete(Long id) {
+  public void delete(Long id) {
     sysMenuMapper.deleteById(id);
-    return true;
   }
 }

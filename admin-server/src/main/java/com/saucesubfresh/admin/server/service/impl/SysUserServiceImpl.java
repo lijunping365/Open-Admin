@@ -3,12 +3,12 @@ package com.saucesubfresh.admin.server.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.saucesubfresh.admin.common.tree.TreeUtils;
 import com.saucesubfresh.admin.common.vo.PageResult;
 import com.saucesubfresh.admin.server.convert.SysMenuConvert;
 import com.saucesubfresh.admin.server.convert.SysUserConvert;
 import com.saucesubfresh.admin.server.dto.create.SysUserCreateDTO;
 import com.saucesubfresh.admin.server.dto.req.SysUserReqDTO;
-import com.saucesubfresh.admin.server.dto.resp.SysMenuRespDTO;
 import com.saucesubfresh.admin.server.dto.resp.SysUserRespDTO;
 import com.saucesubfresh.admin.server.dto.update.SysUserUpdateDTO;
 import com.saucesubfresh.admin.server.entity.SysMenuDO;
@@ -18,6 +18,7 @@ import com.saucesubfresh.admin.server.mapper.SysMenuMapper;
 import com.saucesubfresh.admin.server.mapper.SysRoleMapper;
 import com.saucesubfresh.admin.server.mapper.SysUserMapper;
 import com.saucesubfresh.admin.server.service.SysUserService;
+import com.saucesubfresh.admin.server.vo.MenuTreeVO;
 import com.saucesubfresh.starter.oauth.domain.UserDetails;
 import com.saucesubfresh.starter.oauth.service.UserDetailService;
 import org.apache.commons.lang3.StringUtils;
@@ -83,11 +84,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
   }
 
   @Override
-  public List<SysMenuRespDTO> getMenus(Long userId) {
+  public List<MenuTreeVO> getMenuTree(Long userId) {
     SysUserDO sysUserDO = sysUserMapper.selectById(userId);
     List<String> roles = Arrays.asList(StringUtils.split(sysUserDO.getRoles(), ","));
     List<SysMenuDO> sysMenuDOS = getMenusList(roles);
-    return SysMenuConvert.INSTANCE.convertList(sysMenuDOS);
+    List<MenuTreeVO> menuTree = SysMenuConvert.INSTANCE.convertListVO(sysMenuDOS);
+    menuTree = new TreeUtils<MenuTreeVO>().buildTree(menuTree);
+    return menuTree;
   }
 
   /**

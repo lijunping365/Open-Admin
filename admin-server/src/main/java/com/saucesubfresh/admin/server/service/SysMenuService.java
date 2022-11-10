@@ -20,16 +20,16 @@ import java.util.List;
  */
 public interface SysMenuService {
 
-  List<MenuTreeVO> getMenuTree(Long userId);
+  List<MenuTreeVO> getMenuTree();
 
   PageResult<SysMenuRespDTO> selectPage(SysMenuReqDTO sysMenuReqDTO);
 
   SysMenuRespDTO getItem(Long id);
 
-  boolean save(SysMenuCreateDTO sysMenuCreateDTO);
+  void save(SysMenuCreateDTO sysMenuCreateDTO);
 
-  boolean update(SysMenuUpdateDTO sysMenuUpdateDTO);
+  void update(SysMenuUpdateDTO sysMenuUpdateDTO);
 
-  boolean delete(Long id);
+  void delete(Long id);
 }
 

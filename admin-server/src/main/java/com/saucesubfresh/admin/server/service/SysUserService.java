@@ -7,6 +7,7 @@ import com.saucesubfresh.admin.server.dto.req.SysUserReqDTO;
 import com.saucesubfresh.admin.server.dto.resp.SysMenuRespDTO;
 import com.saucesubfresh.admin.server.dto.resp.SysUserRespDTO;
 import com.saucesubfresh.admin.server.dto.update.SysUserUpdateDTO;
+import com.saucesubfresh.admin.server.vo.MenuTreeVO;
 
 import java.util.List;
 
@@ -29,6 +30,6 @@ public interface SysUserService {
 
   void allocRole(SysUserUpdateDTO sysUserUpdateDTO);
 
-  List<SysMenuRespDTO> getMenus(Long userId);
+  List<MenuTreeVO> getMenuTree(Long userId);
 }
 

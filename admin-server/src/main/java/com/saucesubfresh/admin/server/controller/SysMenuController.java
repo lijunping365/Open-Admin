@@ -44,23 +44,26 @@ public class SysMenuController {
   }
 
   @PostMapping("/save")
-  public Result<Boolean> save(@RequestBody @Valid SysMenuCreateDTO sysMenuCreateDTO) {
-    return Result.succeed(sysMenuService.save(sysMenuCreateDTO));
+  public Result<Void> save(@RequestBody @Valid SysMenuCreateDTO sysMenuCreateDTO) {
+    sysMenuService.save(sysMenuCreateDTO);
+    return Result.succeed();
   }
 
   @PutMapping("/update")
-  public Result<Boolean> update(@RequestBody @Valid SysMenuUpdateDTO sysMenuUpdateDTO) {
-    return Result.succeed(sysMenuService.update(sysMenuUpdateDTO));
+  public Result<Void> update(@RequestBody @Valid SysMenuUpdateDTO sysMenuUpdateDTO) {
+    sysMenuService.update(sysMenuUpdateDTO);
+    return Result.succeed();
   }
 
   @PutMapping("/delete/{id}")
-  public Result<Boolean> delete(@PathVariable("id") Long id) {
-    return Result.succeed(sysMenuService.delete(id));
+  public Result<Void> delete(@PathVariable("id") Long id) {
+    sysMenuService.delete(id);
+    return Result.succeed();
   }
 
   @GetMapping("/tree")
   public Result<List<MenuTreeVO>> getMenuTree() {
-    return Result.succeed(sysMenuService.getMenuTree(UserSecurityContextHolder.getUserId()));
+    return Result.succeed(sysMenuService.getMenuTree());
   }
 
 }
