@@ -47,6 +47,10 @@ public class SysUserRespDTO implements Serializable {
    */
   private String mobile;
   /**
+   * 角色id，逗号分割字符串
+   */
+  private String roles;
+  /**
    * 创建时间
    */
   private LocalDateTime createTime;
@@ -74,10 +78,5 @@ public class SysUserRespDTO implements Serializable {
    * 状态(0 表示已冻结，1 启用)
    */
   private Integer accountStatus;
-
-  /**
-   * 角色列表
-   */
-  private List<String> authorities;
 
 }

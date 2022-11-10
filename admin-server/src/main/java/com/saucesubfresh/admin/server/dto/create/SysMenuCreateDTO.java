@@ -50,7 +50,7 @@ public class SysMenuCreateDTO implements Serializable {
    */
   private String memo;
   /**
-   * 权限列表，json 字符串
+   * 权限字符串，逗号分割
    */
   private String authorities;
 

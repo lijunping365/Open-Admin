@@ -5,23 +5,22 @@ import com.saucesubfresh.admin.common.vo.PageResult;
 import com.saucesubfresh.admin.server.convert.SysUserConvert;
 import com.saucesubfresh.admin.server.dto.create.SysUserCreateDTO;
 import com.saucesubfresh.admin.server.dto.req.SysUserReqDTO;
+import com.saucesubfresh.admin.server.dto.resp.SysMenuRespDTO;
 import com.saucesubfresh.admin.server.dto.resp.SysUserRespDTO;
 import com.saucesubfresh.admin.server.dto.update.SysUserUpdateDTO;
-import com.saucesubfresh.admin.server.entity.SysRoleDO;
 import com.saucesubfresh.admin.server.entity.SysUserDO;
 import com.saucesubfresh.admin.server.mapper.SysUserMapper;
-import com.saucesubfresh.admin.server.mapper.SysUserRoleMapper;
+import com.saucesubfresh.admin.server.service.SysRoleService;
 import com.saucesubfresh.admin.server.service.SysUserService;
 import com.saucesubfresh.starter.oauth.domain.UserDetails;
 import com.saucesubfresh.starter.oauth.service.UserDetailService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 
 @Service
@@ -31,7 +30,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
   private SysUserMapper sysUserMapper;
 
   @Autowired
-  private SysUserRoleMapper sysUserRoleMapper;
+  private SysRoleService sysRoleService;
 
   @Override
   public UserDetails loadUserByUsername(String username) {
@@ -48,25 +47,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
   @Override
   public SysUserRespDTO loadUserByUserId(Long userId) {
     SysUserDO sysUserDO = sysUserMapper.loadUserByUserId(userId);
-    SysUserRespDTO sysUserRespDTO = SysUserConvert.INSTANCE.convert(sysUserDO);
-    sysUserRespDTO.setAuthorities(getUserRoles(sysUserDO.getId()));
-    return sysUserRespDTO;
+    return SysUserConvert.INSTANCE.convert(sysUserDO);
   }
 
   @Override
-  public SysUserRespDTO saveUser(SysUserCreateDTO sysUserCreateDTO) {
+  public void saveUser(SysUserCreateDTO sysUserCreateDTO) {
     SysUserDO sysUserDO = SysUserConvert.INSTANCE.convert(sysUserCreateDTO);
     sysUserMapper.saveUser(sysUserDO);
-    SysUserRespDTO sysUserRespDTO = SysUserConvert.INSTANCE.convert(sysUserDO);
-    sysUserRespDTO.setAuthorities(getUserRoles(sysUserDO.getId()));
-    return sysUserRespDTO;
   }
 
   @Override
-  public boolean updateBatch(SysUserUpdateDTO sysUserUpdateDTO) {
-    List<SysUserDO> sysUserDOS = sysUserUpdateDTO.getUserIds().stream().map(e -> sysUserMapper.loadUserByUserId(e)).collect(Collectors.toList());
-    this.updateBatchById(sysUserDOS);
-    return true;
+  public void update(SysUserUpdateDTO sysUserUpdateDTO) {
+    SysUserDO sysUserDO = SysUserConvert.INSTANCE.convert(sysUserUpdateDTO);
+    sysUserMapper.updateById(sysUserDO);
   }
 
   @Override
@@ -74,22 +67,36 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
     return null;
   }
 
-  private List<String> getUserRoles(Long userId) {
-    List<SysRoleDO> sysRoleDOList = sysUserRoleMapper.loadUserRolesByUserId(userId);
-    if (CollectionUtils.isEmpty(sysRoleDOList)) {
-      return Collections.emptyList();
-    }
-    return sysRoleDOList.stream().filter(e -> StringUtils.isNotBlank(e.getName())).map(SysRoleDO::getName).collect(Collectors.toList());
+  @Override
+  public void allocRole(SysUserUpdateDTO sysUserUpdateDTO) {
+    SysUserDO sysUserDO = SysUserConvert.INSTANCE.convert(sysUserUpdateDTO);
+    sysUserMapper.updateById(sysUserDO);
   }
 
+  @Override
+  public List<SysMenuRespDTO> getMenus() {
+    return null;
+  }
+
+  /**
+   * 这里需要注意：
+   *
+   * setAuthorities 设置的是用户拥有的权限，但是如果此时修改了用户的相关权限
+   * 想要做到立刻让该用户感知到，需要将该用户的 token 失效掉，让其重新登录就好了
+   *
+   * @param sysUserDO
+   * @return
+   */
   private UserDetails convert(SysUserDO sysUserDO){
+    List<String> roles = Arrays.asList(StringUtils.split(sysUserDO.getRoles(), ","));
+    Set<String> authorities = sysRoleService.getAuthorities(roles);
     UserDetails userDetails = new UserDetails();
     userDetails.setId(sysUserDO.getId());
     userDetails.setUsername(sysUserDO.getUsername());
     userDetails.setPassword(sysUserDO.getPassword());
     userDetails.setMobile(sysUserDO.getMobile());
     userDetails.setAccountLocked(sysUserDO.getAccountStatus() != 1);
-    userDetails.setAuthorities(getUserRoles(sysUserDO.getId()));
+    //userDetails.setAuthorities(authorities);
     return userDetails;
   }
 }

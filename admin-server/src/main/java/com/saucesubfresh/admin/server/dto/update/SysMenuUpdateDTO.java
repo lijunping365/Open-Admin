@@ -49,7 +49,6 @@ public class SysMenuUpdateDTO implements Serializable {
    * 备注
    */
   private String memo;
-
   /**
    * 权限列表，json 字符串
    */

@@ -1,12 +1,10 @@
 package com.saucesubfresh.admin.server.dto.update;
 
 
-import com.saucesubfresh.admin.common.enums.CommonStatusEnum;
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -23,13 +21,58 @@ public class SysUserUpdateDTO implements Serializable {
   /**
    * 主键id
    */
-  @NotEmpty(message = "用户编号不能为空")
-  private List<Long> userIds;
-
+  private Long id;
   /**
-   * 账号状态(0 表示已删除，1 表示可用，2 表示已冻结)
+   * 头像
    */
-  @NotNull(message = "账号状态不能为空")
-  private Integer accountStatus;
+  private String avatar;
+  /**
+   * 名字
+   */
+  private String username;
+  /**
+   * 密码
+   */
+  private String password;
+  /**
+   * 性别（F 表示女性，M 表示男性）
+   */
+  private String sex;
+  /**
+   * 电子邮件
+   */
+  private String email;
+  /**
+   * 手机号
+   */
+  private String mobile;
+  /**
+   * 角色id，逗号分割字符串
+   */
+  private String roles;
+  /**
+   * 创建时间
+   */
+  private LocalDateTime createTime;
+  /**
+   * 更新时间
+   */
+  private LocalDateTime updateTime;
+  /**
+   * 更新人
+   */
+  private Long updateUser;
+  /**
+   * 国
+   */
+  private String country;
+  /**
+   * 省
+   */
+  private String province;
+  /**
+   * 市
+   */
+  private String city;
 
 }

@@ -7,6 +7,7 @@ import com.saucesubfresh.admin.common.vo.PageResult;
 import com.saucesubfresh.admin.server.convert.SysRoleConvert;
 import com.saucesubfresh.admin.server.dto.create.SysRoleCreateDTO;
 import com.saucesubfresh.admin.server.dto.req.SysRoleReqDTO;
+import com.saucesubfresh.admin.server.dto.resp.SysMenuRespDTO;
 import com.saucesubfresh.admin.server.dto.resp.SysRoleRespDTO;
 import com.saucesubfresh.admin.server.dto.update.SysRoleUpdateDTO;
 import com.saucesubfresh.admin.server.entity.SysRoleDO;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -27,27 +29,24 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleDO> im
   private SysRoleMapper sysRoleMapper;
 
   @Override
-  public boolean save(SysRoleCreateDTO sysRoleCreateDTO) {
+  public void save(SysRoleCreateDTO sysRoleCreateDTO) {
     SysRoleDO sysRoleDO = SysRoleConvert.INSTANCE.convert(sysRoleCreateDTO);
     sysRoleDO.setCreateTime(LocalDateTime.now());
     sysRoleDO.setCreateUser(UserSecurityContextHolder.getUserId());
     sysRoleMapper.insert(sysRoleDO);
-    return true;
   }
 
   @Override
-  public boolean update(SysRoleUpdateDTO sysRoleUpdateDTO) {
+  public void update(SysRoleUpdateDTO sysRoleUpdateDTO) {
     SysRoleDO sysRoleDO = SysRoleConvert.INSTANCE.convert(sysRoleUpdateDTO);
     sysRoleDO.setUpdateTime(LocalDateTime.now());
     sysRoleDO.setUpdateUser(UserSecurityContextHolder.getUserId());
     sysRoleMapper.updateById(sysRoleDO);
-    return true;
   }
 
   @Override
-  public boolean delete(Long id) {
+  public void delete(Long id) {
     sysRoleMapper.deleteById(id);
-    return true;
   }
 
   @Override
@@ -58,8 +57,20 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleDO> im
   }
 
   @Override
-  public List<SysRoleRespDTO> selectList(Integer total) {
-    List<SysRoleDO> roleDOS = sysRoleMapper.queryList(total);
+  public List<SysRoleRespDTO> selectAll() {
+    List<SysRoleDO> roleDOS = sysRoleMapper.queryList();
     return SysRoleConvert.INSTANCE.convertList(roleDOS);
+  }
+
+  @Override
+  public Set<String> getAuthorities(List<String> roles) {
+    return null;
+  }
+
+
+  @Override
+  public void allocMenu(SysRoleUpdateDTO sysRoleUpdateDTO) {
+    SysRoleDO sysRoleDO = SysRoleConvert.INSTANCE.convert(sysRoleUpdateDTO);
+    sysRoleMapper.updateById(sysRoleDO);
   }
 }

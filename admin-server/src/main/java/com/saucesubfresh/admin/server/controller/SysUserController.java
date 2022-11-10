@@ -4,6 +4,7 @@ import com.saucesubfresh.admin.common.vo.PageResult;
 import com.saucesubfresh.admin.common.vo.Result;
 import com.saucesubfresh.admin.server.dto.create.SysUserCreateDTO;
 import com.saucesubfresh.admin.server.dto.req.SysUserReqDTO;
+import com.saucesubfresh.admin.server.dto.resp.SysMenuRespDTO;
 import com.saucesubfresh.admin.server.dto.resp.SysUserRespDTO;
 import com.saucesubfresh.admin.server.dto.update.SysUserUpdateDTO;
 import com.saucesubfresh.admin.server.service.SysUserService;
@@ -14,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 /**
@@ -38,8 +40,9 @@ public class SysUserController {
   }
 
   @PutMapping("/update")
-  public Result<Boolean> updateBatch(@RequestBody @Valid SysUserUpdateDTO sysUserUpdateDTO) {
-    return Result.succeed(sysUserService.updateBatch(sysUserUpdateDTO));
+  public Result<Void> update(@RequestBody @Valid SysUserUpdateDTO sysUserUpdateDTO) {
+    sysUserService.update(sysUserUpdateDTO);
+    return Result.succeed();
   }
 
   @GetMapping("/loadByUserId")
@@ -54,7 +57,26 @@ public class SysUserController {
   }
 
   @PostMapping("/saveUser")
-  public Result<SysUserRespDTO> saveUser(@RequestBody @Valid SysUserCreateDTO sysUserCreateDTO) {
-    return Result.succeed(sysUserService.saveUser(sysUserCreateDTO));
+  public Result<Void> saveUser(@RequestBody @Valid SysUserCreateDTO sysUserCreateDTO) {
+    sysUserService.saveUser(sysUserCreateDTO);
+    return Result.succeed();
+  }
+
+  /**
+   * 给用户分配角色
+   */
+  @PostMapping("/allocRole")
+  public Result<Void> allocRole(@RequestBody @Valid SysUserUpdateDTO sysUserUpdateDTO) {
+    sysUserService.allocRole(sysUserUpdateDTO);
+    return Result.succeed();
+  }
+
+  /**
+   * 获取用户拥有的相关菜单
+   * @return
+   */
+  @GetMapping("/getMenus")
+  public Result<List<SysMenuRespDTO>> getMenus() {
+    return Result.succeed(sysUserService.getMenus());
   }
 }

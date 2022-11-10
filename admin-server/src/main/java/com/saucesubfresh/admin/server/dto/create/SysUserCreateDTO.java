@@ -48,6 +48,10 @@ public class SysUserCreateDTO implements Serializable {
   @NotEmpty(message = "手机号不能为空")
   private String mobile;
   /**
+   * 角色id，逗号分割字符串
+   */
+  private String roles;
+  /**
    * 创建时间
    */
   private LocalDateTime createTime;

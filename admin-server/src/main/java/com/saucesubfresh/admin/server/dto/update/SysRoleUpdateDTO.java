@@ -35,5 +35,9 @@ public class SysRoleUpdateDTO implements Serializable {
    * 排序字段
    */
   private Integer sort;
+  /**
+   * 权限id，逗号分隔字符串
+   */
+  private String authorities;
 
 }

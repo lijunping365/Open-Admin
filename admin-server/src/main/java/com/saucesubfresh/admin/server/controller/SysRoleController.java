@@ -31,8 +31,8 @@ public class SysRoleController {
   private SysRoleService sysRoleService;
 
   @GetMapping("/list")
-  public Result<List<SysRoleRespDTO>> list(@RequestParam(value = "total", required = false) Integer total) {
-    return Result.succeed(sysRoleService.selectList(total));
+  public Result<List<SysRoleRespDTO>> list() {
+    return Result.succeed(sysRoleService.selectAll());
   }
 
   @GetMapping("/page")
@@ -41,18 +41,29 @@ public class SysRoleController {
   }
 
   @PostMapping("/save")
-  public Result<Boolean> save(@RequestBody @Valid SysRoleCreateDTO sysRoleCreateDTO) {
-    return Result.succeed(sysRoleService.save(sysRoleCreateDTO));
+  public Result<Void> save(@RequestBody @Valid SysRoleCreateDTO sysRoleCreateDTO) {
+    sysRoleService.save(sysRoleCreateDTO);
+    return Result.succeed();
   }
 
   @PutMapping("/update")
-  public Result<Boolean> update(@RequestBody @Valid SysRoleUpdateDTO sysRoleUpdateDTO) {
-    return Result.succeed(sysRoleService.update(sysRoleUpdateDTO));
+  public Result<Void> update(@RequestBody @Valid SysRoleUpdateDTO sysRoleUpdateDTO) {
+    sysRoleService.update(sysRoleUpdateDTO);
+    return Result.succeed();
   }
 
   @PutMapping("/delete/{id}")
-  public Result<Boolean> delete(@PathVariable("id") Long id) {
-    return Result.succeed(sysRoleService.delete(id));
+  public Result<Void> delete(@PathVariable("id") Long id) {
+    sysRoleService.delete(id);
+    return Result.succeed();
   }
 
+  /**
+   * 给角色分配菜单
+   */
+  @PostMapping("/allocMenu")
+  public Result<Void> allocMenu(@RequestBody @Valid SysRoleUpdateDTO sysRoleUpdateDTO) {
+    sysRoleService.allocMenu(sysRoleUpdateDTO);
+    return Result.succeed();
+  }
 }

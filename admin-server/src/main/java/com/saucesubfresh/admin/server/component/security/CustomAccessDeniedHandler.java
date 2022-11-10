@@ -1,12 +1,10 @@
 package com.saucesubfresh.admin.server.component.security;
 
 import com.saucesubfresh.admin.common.vo.ResultEnum;
-import com.saucesubfresh.admin.server.service.SysRoleMenuService;
 import com.saucesubfresh.starter.security.authorization.AccessDeniedHandler;
 import com.saucesubfresh.starter.security.context.UserSecurityContextHolder;
 import com.saucesubfresh.starter.security.exception.AccessDeniedException;
 import com.saucesubfresh.starter.security.exception.SecurityException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.server.PathContainer;
 import org.springframework.stereotype.Component;
@@ -16,7 +14,6 @@ import org.springframework.web.util.pattern.PathPatternParser;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author: 李俊平
@@ -25,11 +22,8 @@ import java.util.Set;
 @Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
-    @Autowired
-    private SysRoleMenuService roleMenuService;
-
     @Value("#{'${com.saucesubfresh.security.white-paths:}'.split(',')}")
-    private Set<String> whitePaths;
+    private List<String> whitePaths;
 
     @Override
     public boolean handler(HttpServletRequest request, Object o) throws SecurityException {
@@ -37,21 +31,14 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
             return Boolean.TRUE;
         }
 
-        Set<String> authorities;
-        try {
-            List<String> roles = UserSecurityContextHolder.getContext().getAuthorities();
-            authorities = roleMenuService.getAuthorities(roles);
-        }catch (Exception e){
-            throw new AccessDeniedException(ResultEnum.FORBIDDEN.getMsg());
-        }
-
+        List<String> authorities = UserSecurityContextHolder.getContext().getAuthorities();
         if (CollectionUtils.isEmpty(authorities) || !matcher(request, authorities)) {
             throw new AccessDeniedException(ResultEnum.FORBIDDEN.getMsg());
         }
         return Boolean.TRUE;
     }
 
-    private boolean matcher(HttpServletRequest request, Set<String> paths){
+    private boolean matcher(HttpServletRequest request, List<String> paths){
         PathPattern pattern = PathPatternParser.defaultInstance.parse(request.getRequestURI());
         boolean match = false;
         for (String path : paths) {

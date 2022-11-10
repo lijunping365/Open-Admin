@@ -34,6 +34,10 @@ public class SysRoleRespDTO implements Serializable {
    */
   private Integer sort;
   /**
+   * 权限id，逗号分隔字符串
+   */
+  private String authorities;
+  /**
    * 创建时间
    */
   private LocalDateTime createTime;

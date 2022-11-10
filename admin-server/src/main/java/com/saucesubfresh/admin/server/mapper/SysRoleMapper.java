@@ -26,7 +26,7 @@ public interface SysRoleMapper extends BaseMapper<SysRoleDO> {
         .eq(StringUtils.isNotEmpty(sysRoleReqDTO.getKeyword()), SysRoleDO::getName, sysRoleReqDTO.getKeyword()));
   }
 
-  default List<SysRoleDO> queryList(Integer total) {
+  default List<SysRoleDO> queryList() {
     return selectList(Wrappers.<SysRoleDO>lambdaQuery()
         .orderByAsc(SysRoleDO::getSort));
   }

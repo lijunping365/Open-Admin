@@ -49,6 +49,10 @@ public class SysUserDO implements Serializable {
    */
   private String mobile;
   /**
+   * 角色id，逗号分割字符串
+   */
+  private String roles;
+  /**
    * 国
    */
   private String country;
@@ -64,7 +68,6 @@ public class SysUserDO implements Serializable {
    * 用户状态（0：锁定，1正常）
    */
   private Integer accountStatus;
-
   /**
    * 创建时间
    */

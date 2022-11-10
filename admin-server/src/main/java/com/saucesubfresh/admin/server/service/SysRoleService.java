@@ -8,6 +8,7 @@ import com.saucesubfresh.admin.server.dto.resp.SysRoleRespDTO;
 import com.saucesubfresh.admin.server.dto.update.SysRoleUpdateDTO;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 角色表
@@ -18,14 +19,28 @@ import java.util.List;
  */
 public interface SysRoleService {
 
-  boolean save(SysRoleCreateDTO sysRoleCreateDTO);
+  void save(SysRoleCreateDTO sysRoleCreateDTO);
 
-  boolean update(SysRoleUpdateDTO sysRoleUpdateDTO);
+  void update(SysRoleUpdateDTO sysRoleUpdateDTO);
 
-  boolean delete(Long id);
+  void delete(Long id);
 
   PageResult<SysRoleRespDTO> selectPage(SysRoleReqDTO sysRoleReqDTO);
 
-  List<SysRoleRespDTO> selectList(Integer total);
+  List<SysRoleRespDTO> selectAll();
+
+  /**
+   * 通过角色名称获取权限列表
+   * @param roles
+   * @return
+   */
+  Set<String> getAuthorities(List<String> roles);
+
+  /**
+   * 分配权限
+   *
+   * @return
+   */
+  void allocMenu(SysRoleUpdateDTO sysRoleUpdateDTO);
 }
 
