@@ -2,13 +2,8 @@ package com.saucesubfresh.admin.server.config;
 
 import com.saucesubfresh.admin.common.exception.ServiceException;
 import com.saucesubfresh.admin.common.vo.Result;
-import com.saucesubfresh.admin.common.vo.ResultEnum;
-import com.saucesubfresh.starter.security.exception.AccessDeniedException;
 import com.saucesubfresh.starter.security.exception.SecurityException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -16,11 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 全局异常处理器，将 Exception 翻译成 CommonResult + 对应的异常编号
@@ -31,19 +21,13 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-  @ExceptionHandler({IllegalArgumentException.class})
-  public Result<Object> badRequest(IllegalArgumentException ex) {
-    log.warn("[illegalArgumentExceptionHandler]", ex);
-    return Result.failed(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
-  }
-
   /**
    * 处理 SpringMVC 404 异常
    */
   @ExceptionHandler({NoHandlerFoundException.class})
   public Result<Object> badRequest(NoHandlerFoundException ex) {
     log.warn("[noHandlerFoundExceptionHandler]", ex);
-    return Result.failed(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+    return Result.failed(String.format("请求的页面不存在:%s", ex.getRequestURL()));
   }
 
   /**
@@ -54,7 +38,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler({MissingServletRequestParameterException.class})
   public Result<Object> handleError(MissingServletRequestParameterException ex) {
     log.warn("[missingServletRequestParameterExceptionHandler]", ex);
-    return Result.failed(HttpStatus.BAD_REQUEST.value(), String.format("请求参数缺失:%s", ex.getParameterName()));
+    return Result.failed(String.format("请求参数缺失:%s", ex.getParameterName()));
   }
 
   /**
@@ -65,7 +49,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler({MethodArgumentTypeMismatchException.class})
   public Result<Object> handleError(MethodArgumentTypeMismatchException ex) {
     log.warn("[missingServletRequestParameterExceptionHandler]", ex);
-    return Result.failed(HttpStatus.BAD_REQUEST.value(), String.format("请求参数类型错误:%s", ex.getMessage()));
+    return Result.failed(String.format("请求参数类型错误:%s", ex.getParameter().getParameterName()));
   }
 
   /**
@@ -74,18 +58,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public Result<Object> methodArgumentNotValid(MethodArgumentNotValidException ex) {
     log.warn("[methodArgumentNotValidExceptionHandler]", ex);
-    List<ObjectError> allErrors = ex.getBindingResult().getAllErrors();
-
-    Map<String, String> errors = allErrors.stream()
-            .map(error -> Collections.singletonMap(((FieldError) error).getField(), error.getDefaultMessage()))
-            .flatMap(stringStringMap -> stringStringMap.entrySet().stream())
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-    String errorMsg = allErrors.stream()
-            .map(error -> ((FieldError) error).getField() + ":" + error.getDefaultMessage())
-            .collect(Collectors.joining(";"));
-
-    return Result.failed(errors, HttpStatus.BAD_REQUEST.value(), String.format("请求参数不正确:%s", errorMsg));
+    return Result.failed(String.format("请求参数不正确:%s", ex.getMessage()));
   }
 
   /**
@@ -94,9 +67,15 @@ public class GlobalExceptionHandler {
    * 例如说，A 接口的方法为 GET 方式，结果请求方法为 POST 方式，导致不匹配
    */
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-  public Result<Object> httpRequestMethodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException ex) {
+  public Result<Object> methodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException ex) {
     log.warn("[httpRequestMethodNotSupportedExceptionHandler]", ex);
-    return Result.failed(HttpStatus.BAD_REQUEST.value(), String.format("请求方法不正确:%s", ex.getMessage()));
+    return Result.failed(String.format("请求方法不正确:%s", ex.getMessage()));
+  }
+
+  @ExceptionHandler({SecurityException.class, RuntimeException.class, Exception.class})
+  public Result<Object> securityException(SecurityException ex) {
+    log.warn("[securityException]", ex);
+    return Result.failed(ex.getMessage());
   }
 
   @ExceptionHandler({ServiceException.class})
@@ -104,32 +83,4 @@ public class GlobalExceptionHandler {
     log.warn("[serviceExceptionHandler]", ex);
     return Result.failed(ex.getCode(), ex.getMessage());
   }
-
-  @ExceptionHandler({SecurityException.class})
-  public Result<Object> securityException(SecurityException ex) {
-    log.warn("[securityException]", ex);
-    if (ex instanceof AccessDeniedException){
-      return Result.failed(ResultEnum.FORBIDDEN.getCode(), ex.getMessage());
-    }
-    return Result.failed(ResultEnum.UNAUTHORIZED.getCode(), ex.getMessage());
-  }
-
-  @ExceptionHandler({RuntimeException.class})
-  public Result<Object> runtime(RuntimeException ex) {
-    log.warn("[runtimeExceptionHandler]", ex);
-    return Result.failed(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
-  }
-
-  @ExceptionHandler({Exception.class})
-  public Result<Object> exception(Exception ex) {
-    log.warn("[exceptionHandler]", ex);
-    return Result.failed(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
-  }
-
-  @ExceptionHandler({Throwable.class})
-  public Result<Object> error(Throwable ex) {
-    log.warn("[throwableHandler]", ex);
-    return Result.failed(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
-  }
-
 }
