@@ -2,6 +2,8 @@ package com.saucesubfresh.admin.server.config;
 
 import com.saucesubfresh.admin.common.exception.ServiceException;
 import com.saucesubfresh.admin.common.vo.Result;
+import com.saucesubfresh.admin.common.vo.ResultEnum;
+import com.saucesubfresh.starter.security.exception.InvalidBearerTokenException;
 import com.saucesubfresh.starter.security.exception.SecurityException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -72,15 +74,18 @@ public class GlobalExceptionHandler {
     return Result.failed(String.format("请求方法不正确:%s", ex.getMessage()));
   }
 
-  @ExceptionHandler({SecurityException.class, RuntimeException.class, Exception.class})
-  public Result<Object> securityException(SecurityException ex) {
+  @ExceptionHandler({SecurityException.class})
+  public Result<Object> serviceException(SecurityException ex) {
     log.warn("[securityException]", ex);
+    if (ex instanceof InvalidBearerTokenException){
+      return Result.failed(ResultEnum.UNAUTHORIZED.getCode(), ex.getMessage());
+    }
     return Result.failed(ex.getMessage());
   }
 
   @ExceptionHandler({ServiceException.class})
-  public Result<Object> serviceException(ServiceException ex) {
+  public Result<Object> securityException(ServiceException ex) {
     log.warn("[serviceExceptionHandler]", ex);
-    return Result.failed(ex.getCode(), ex.getMessage());
+    return Result.failed(ex.getMessage());
   }
 }
