@@ -77,6 +77,7 @@ public class SysUserController {
    */
   @GetMapping("/getMenus")
   public Result<List<SysMenuRespDTO>> getMenus() {
-    return Result.succeed(sysUserService.getMenus());
+    Long userId = UserSecurityContextHolder.getUserId();
+    return Result.succeed(sysUserService.getMenus(userId));
   }
 }

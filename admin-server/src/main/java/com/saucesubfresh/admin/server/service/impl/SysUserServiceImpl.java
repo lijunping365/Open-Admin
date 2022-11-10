@@ -1,16 +1,22 @@
 package com.saucesubfresh.admin.server.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.saucesubfresh.admin.common.vo.PageResult;
+import com.saucesubfresh.admin.server.convert.SysMenuConvert;
 import com.saucesubfresh.admin.server.convert.SysUserConvert;
 import com.saucesubfresh.admin.server.dto.create.SysUserCreateDTO;
 import com.saucesubfresh.admin.server.dto.req.SysUserReqDTO;
 import com.saucesubfresh.admin.server.dto.resp.SysMenuRespDTO;
 import com.saucesubfresh.admin.server.dto.resp.SysUserRespDTO;
 import com.saucesubfresh.admin.server.dto.update.SysUserUpdateDTO;
+import com.saucesubfresh.admin.server.entity.SysMenuDO;
+import com.saucesubfresh.admin.server.entity.SysRoleDO;
 import com.saucesubfresh.admin.server.entity.SysUserDO;
+import com.saucesubfresh.admin.server.mapper.SysMenuMapper;
+import com.saucesubfresh.admin.server.mapper.SysRoleMapper;
 import com.saucesubfresh.admin.server.mapper.SysUserMapper;
-import com.saucesubfresh.admin.server.service.SysRoleService;
 import com.saucesubfresh.admin.server.service.SysUserService;
 import com.saucesubfresh.starter.oauth.domain.UserDetails;
 import com.saucesubfresh.starter.oauth.service.UserDetailService;
@@ -18,9 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -30,7 +34,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
   private SysUserMapper sysUserMapper;
 
   @Autowired
-  private SysRoleService sysRoleService;
+  private SysRoleMapper sysRoleMapper;
+
+  @Autowired
+  private SysMenuMapper sysMenuMapper;
 
   @Override
   public UserDetails loadUserByUsername(String username) {
@@ -64,7 +71,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
 
   @Override
   public PageResult<SysUserRespDTO> selectPage(SysUserReqDTO sysUserReqDTO) {
-    return null;
+    Page<SysUserDO> page = sysUserMapper.queryPage(sysUserReqDTO);
+    IPage<SysUserRespDTO> convert = page.convert(SysUserConvert.INSTANCE::convert);
+    return PageResult.build(convert);
   }
 
   @Override
@@ -74,8 +83,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
   }
 
   @Override
-  public List<SysMenuRespDTO> getMenus() {
-    return null;
+  public List<SysMenuRespDTO> getMenus(Long userId) {
+    SysUserDO sysUserDO = sysUserMapper.selectById(userId);
+    List<String> roles = Arrays.asList(StringUtils.split(sysUserDO.getRoles(), ","));
+    List<SysMenuDO> sysMenuDOS = getMenusList(roles);
+    return SysMenuConvert.INSTANCE.convertList(sysMenuDOS);
   }
 
   /**
@@ -89,14 +101,29 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
    */
   private UserDetails convert(SysUserDO sysUserDO){
     List<String> roles = Arrays.asList(StringUtils.split(sysUserDO.getRoles(), ","));
-    Set<String> authorities = sysRoleService.getAuthorities(roles);
+    final List<SysMenuDO> sysMenuDOS = getMenusList(roles);
+    List<String> authoritiesList = new ArrayList<>();
+    sysMenuDOS.forEach(e->{
+      List<String> authorities = Arrays.asList(StringUtils.split(e.getAuthorities(), ","));
+      authoritiesList.addAll(authorities);
+    });
     UserDetails userDetails = new UserDetails();
     userDetails.setId(sysUserDO.getId());
     userDetails.setUsername(sysUserDO.getUsername());
     userDetails.setPassword(sysUserDO.getPassword());
     userDetails.setMobile(sysUserDO.getMobile());
     userDetails.setAccountLocked(sysUserDO.getAccountStatus() != 1);
-    //userDetails.setAuthorities(authorities);
+    userDetails.setAuthorities(authoritiesList);
     return userDetails;
+  }
+
+  private List<SysMenuDO> getMenusList(List<String> roles){
+    List<SysRoleDO> roleDOS = sysRoleMapper.selectBatchIds(roles);
+    Set<String> menuIdSet = new HashSet<>();
+    roleDOS.forEach(e->{
+      List<String> menuIds = Arrays.asList(StringUtils.split(e.getAuthorities(), ","));
+      menuIdSet.addAll(menuIds);
+    });
+    return sysMenuMapper.selectBatchIds(menuIdSet);
   }
 }

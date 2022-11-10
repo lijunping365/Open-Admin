@@ -29,6 +29,6 @@ public interface SysUserService {
 
   void allocRole(SysUserUpdateDTO sysUserUpdateDTO);
 
-  List<SysMenuRespDTO> getMenus();
+  List<SysMenuRespDTO> getMenus(Long userId);
 }
 

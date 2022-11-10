@@ -30,13 +30,6 @@ public interface SysRoleService {
   List<SysRoleRespDTO> selectAll();
 
   /**
-   * 通过角色名称获取权限列表
-   * @param roles
-   * @return
-   */
-  Set<String> getAuthorities(List<String> roles);
-
-  /**
    * 分配权限
    *
    * @return

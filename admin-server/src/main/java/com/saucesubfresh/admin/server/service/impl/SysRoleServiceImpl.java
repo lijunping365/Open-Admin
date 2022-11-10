@@ -63,12 +63,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleDO> im
   }
 
   @Override
-  public Set<String> getAuthorities(List<String> roles) {
-    return null;
-  }
-
-
-  @Override
   public void allocMenu(SysRoleUpdateDTO sysRoleUpdateDTO) {
     SysRoleDO sysRoleDO = SysRoleConvert.INSTANCE.convert(sysRoleUpdateDTO);
     sysRoleMapper.updateById(sysRoleDO);
