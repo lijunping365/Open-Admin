@@ -5,7 +5,6 @@ import com.saucesubfresh.admin.server.dto.create.SysRoleCreateDTO;
 import com.saucesubfresh.admin.server.dto.resp.SysRoleRespDTO;
 import com.saucesubfresh.admin.server.dto.update.SysRoleUpdateDTO;
 import com.saucesubfresh.admin.server.entity.SysRoleDO;
-import com.saucesubfresh.admin.server.vo.SysRoleVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -32,8 +31,6 @@ public interface SysRoleConvert {
   SysRoleDO convert(SysRoleUpdateDTO sysRoleUpdateDTO);
 
   List<SysRoleRespDTO> convertList(List<SysRoleDO> sysRoleDOList);
-
-  List<SysRoleVO> convertList2(List<SysRoleDO> roleDOS);
 }
 
 
