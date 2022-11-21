@@ -103,12 +103,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
    * @return
    */
   private UserDetails convert(SysUserDO sysUserDO){
+    if(Objects.isNull(sysUserDO)){
+      return null;
+    }
+
     UserDetails userDetails = new UserDetails();
     userDetails.setId(sysUserDO.getId());
     userDetails.setUsername(sysUserDO.getUsername());
     userDetails.setPassword(sysUserDO.getPassword());
     userDetails.setMobile(sysUserDO.getMobile());
     userDetails.setAccountLocked(sysUserDO.getAccountStatus() != 1);
+
     String roles = sysUserDO.getRoles();
     List<SysMenuDO> sysMenuDOS = getMenusList(roles);
     if (!CollectionUtils.isEmpty(sysMenuDOS)){
