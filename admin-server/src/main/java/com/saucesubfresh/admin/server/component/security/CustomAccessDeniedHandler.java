@@ -5,7 +5,6 @@ import com.saucesubfresh.starter.security.authorization.AccessDeniedHandler;
 import com.saucesubfresh.starter.security.context.UserSecurityContextHolder;
 import com.saucesubfresh.starter.security.exception.AccessDeniedException;
 import com.saucesubfresh.starter.security.exception.SecurityException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.server.PathContainer;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -22,15 +21,8 @@ import java.util.List;
 @Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
-    @Value("#{'${com.saucesubfresh.security.white-paths:}'.split(',')}")
-    private List<String> whitePaths;
-
     @Override
     public boolean handler(HttpServletRequest request, Object o) throws SecurityException {
-        if (matcher(request, whitePaths)){
-            return Boolean.TRUE;
-        }
-
         List<String> authorities = UserSecurityContextHolder.getContext().getAuthorities();
         if (CollectionUtils.isEmpty(authorities) || !matcher(request, authorities)) {
             throw new AccessDeniedException(ResultEnum.FORBIDDEN.getMsg());
