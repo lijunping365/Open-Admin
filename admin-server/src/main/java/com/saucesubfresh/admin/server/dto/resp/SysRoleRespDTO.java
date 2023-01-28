@@ -34,9 +34,9 @@ public class SysRoleRespDTO implements Serializable {
    */
   private Integer sort;
   /**
-   * 权限id，逗号分隔字符串
+   * 菜单id，逗号分隔字符串
    */
-  private String authorities;
+  private String menus;
   /**
    * 创建时间
    */

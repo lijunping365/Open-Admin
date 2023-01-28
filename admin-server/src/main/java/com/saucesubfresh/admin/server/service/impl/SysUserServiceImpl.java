@@ -137,7 +137,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
     List<SysRoleDO> roleDOS = sysRoleMapper.selectBatchIds(Arrays.asList(roles.split(",")));
     Set<String> menuIdSet = new HashSet<>();
     roleDOS.forEach(e->{
-      List<String> menuIds = Arrays.asList(StringUtils.split(e.getAuthorities(), ","));
+      List<String> menuIds = Arrays.asList(StringUtils.split(e.getMenus(), ","));
       menuIdSet.addAll(menuIds);
     });
     return sysMenuMapper.selectBatchIds(menuIdSet);
