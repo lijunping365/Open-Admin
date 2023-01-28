@@ -30,9 +30,9 @@ public class SysMenuUpdateDTO implements Serializable {
    */
   private String name;
   /**
-   *
+   *菜单路由
    */
-  private String path;
+  private String route;
   /**
    * 菜单图标
    */
@@ -50,7 +50,7 @@ public class SysMenuUpdateDTO implements Serializable {
    */
   private String memo;
   /**
-   * 权限列表，json 字符串
+   * 请求路径，逗号分隔字符串
    */
-  private String authorities;
+  private String path;
 }

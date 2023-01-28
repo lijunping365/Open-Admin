@@ -5,7 +5,6 @@ import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * 角色表
@@ -36,7 +35,7 @@ public class SysRoleCreateDTO implements Serializable {
    */
   private Integer sort;
   /**
-   * 权限id，逗号分隔字符串
+   * 菜单id，逗号分隔字符串
    */
-  private String authorities;
+  private String menus;
 }

@@ -119,9 +119,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserDO> im
     if (!CollectionUtils.isEmpty(sysMenuDOS)){
       List<String> authoritiesList = new ArrayList<>();
       sysMenuDOS.forEach(e->{
-        String authorities = e.getAuthorities();
-        if (StringUtils.isNotBlank(authorities)){
-          authoritiesList.addAll(Arrays.asList(authorities.split(",")));
+        String paths = e.getPath();
+        if (StringUtils.isNotBlank(paths)){
+          authoritiesList.addAll(Arrays.asList(paths.split(",")));
         }
       });
       userDetails.setAuthorities(authoritiesList);

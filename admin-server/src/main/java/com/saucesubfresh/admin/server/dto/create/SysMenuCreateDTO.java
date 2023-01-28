@@ -4,7 +4,6 @@ package com.saucesubfresh.admin.server.dto.create;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * 菜单表
@@ -30,9 +29,9 @@ public class SysMenuCreateDTO implements Serializable {
    */
   private String name;
   /**
-   *
+   * 菜单路由
    */
-  private String path;
+  private String route;
   /**
    * 菜单图标
    */
@@ -50,8 +49,8 @@ public class SysMenuCreateDTO implements Serializable {
    */
   private String memo;
   /**
-   * 菜单id，逗号分隔字符串
+   * 请求路径，逗号分隔字符串
    */
-  private String menus;
+  private String path;
 
 }
