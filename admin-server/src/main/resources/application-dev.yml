@@ -65,4 +65,5 @@ com:
       ignore-paths:
         - "/captcha/**"
         - "/login/**"
-      white-paths: /openAdmin/user/currentUser,/openAdmin/menu/tree
+        - "/user/currentUser"
+        - "/menu/tree"

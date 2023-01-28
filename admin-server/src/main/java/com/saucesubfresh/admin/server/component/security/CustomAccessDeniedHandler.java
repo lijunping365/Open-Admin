@@ -5,12 +5,10 @@ import com.saucesubfresh.starter.security.authorization.AccessDeniedHandler;
 import com.saucesubfresh.starter.security.context.UserSecurityContextHolder;
 import com.saucesubfresh.starter.security.exception.AccessDeniedException;
 import com.saucesubfresh.starter.security.exception.SecurityException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.server.PathContainer;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.util.pattern.PathPattern;
-import org.springframework.web.util.pattern.PathPatternParser;
+import org.springframework.util.PathMatcher;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -22,15 +20,8 @@ import java.util.List;
 @Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
-    @Value("#{'${com.saucesubfresh.security.white-paths:}'.split(',')}")
-    private List<String> whitePaths;
-
     @Override
     public boolean handler(HttpServletRequest request, Object o) throws SecurityException {
-        if (matcher(request, whitePaths)){
-            return Boolean.TRUE;
-        }
-
         List<String> authorities = UserSecurityContextHolder.getContext().getAuthorities();
         if (CollectionUtils.isEmpty(authorities) || !matcher(request, authorities)) {
             throw new AccessDeniedException(ResultEnum.FORBIDDEN.getMsg());
@@ -39,10 +30,11 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     }
 
     private boolean matcher(HttpServletRequest request, List<String> paths){
-        PathPattern pattern = PathPatternParser.defaultInstance.parse(request.getRequestURI());
+        PathMatcher pathMatcher = new AntPathMatcher();
+        String requestURI = request.getRequestURI();
         boolean match = false;
         for (String path : paths) {
-            if (pattern.matches(PathContainer.parsePath(path))) {
+            if (pathMatcher.match(path, requestURI)) {
                 match = true;
             }
         }
