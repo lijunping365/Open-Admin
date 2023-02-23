@@ -1,7 +1,6 @@
 package com.saucesubfresh.admin.server.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
 import com.saucesubfresh.admin.common.tree.TreeUtils;
 import com.saucesubfresh.admin.common.vo.PageResult;
 import com.saucesubfresh.admin.server.convert.SysRegionConvert;
@@ -14,17 +13,12 @@ import com.saucesubfresh.admin.server.mapper.SysRegionMapper;
 import com.saucesubfresh.admin.server.service.SysRegionService;
 import com.saucesubfresh.admin.server.vo.SysRegionVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.saucesubfresh.admin.server.constant.CacheName.REGION_TREE;
 
 
 @Service
