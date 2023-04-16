@@ -27,12 +27,5 @@ public interface SysAccessService {
   PageResult<SysAccessRespDTO> selectPage(SysAccessReqDTO sysAccessReqDTO);
 
   List<SysAccessRespDTO> selectAll();
-
-  /**
-   * 分配权限
-   *
-   * @return
-   */
-  void allocAccess(SysAccessUpdateDTO sysAccessUpdateDTO);
 }
 

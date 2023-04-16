@@ -59,10 +59,4 @@ public class SysAccessServiceImpl extends ServiceImpl<SysAccessMapper, SysAccess
     List<SysAccessDO> roleDOS = sysAccessMapper.queryList();
     return SysAccessConvert.INSTANCE.convertList(roleDOS);
   }
-
-  @Override
-  public void allocAccess(SysAccessUpdateDTO sysAccessUpdateDTO) {
-    SysAccessDO sysAccessDO = SysAccessConvert.INSTANCE.convert(sysAccessUpdateDTO);
-    sysAccessMapper.updateById(sysAccessDO);
-  }
 }

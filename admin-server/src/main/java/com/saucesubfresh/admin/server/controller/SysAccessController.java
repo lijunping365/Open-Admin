@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Validated
 @RestController
-@RequestMapping("/role")
+@RequestMapping("/access")
 public class SysAccessController {
 
   @Autowired
@@ -55,15 +55,6 @@ public class SysAccessController {
   @PutMapping("/delete/{id}")
   public Result<Void> delete(@PathVariable("id") Long id) {
     sysAccessService.delete(id);
-    return Result.succeed();
-  }
-
-  /**
-   * 给角色分配权限
-   */
-  @PostMapping("/allocAccess")
-  public Result<Void> allocAccess(@RequestBody @Valid SysAccessUpdateDTO sysAccessUpdateDTO) {
-    sysAccessService.allocAccess(sysAccessUpdateDTO);
     return Result.succeed();
   }
 }
