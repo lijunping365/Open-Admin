@@ -31,10 +31,10 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     private boolean matcher(HttpServletRequest request, List<String> paths){
         PathMatcher pathMatcher = new AntPathMatcher();
-        String requestURI = request.getRequestURI();
+        String servletPath = request.getServletPath();
         boolean match = false;
         for (String path : paths) {
-            if (pathMatcher.match(path, requestURI)) {
+            if (pathMatcher.match(path, servletPath)) {
                 match = true;
             }
         }
