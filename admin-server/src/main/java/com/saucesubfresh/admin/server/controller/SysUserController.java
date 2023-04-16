@@ -56,28 +56,21 @@ public class SysUserController {
     return Result.succeed(sysUserService.loadUserByUserId(userId));
   }
 
+  @GetMapping("/getUserMenus")
+  public Result<List<MenuTreeVO>> getUserMenus() {
+    Long userId = UserSecurityContextHolder.getUserId();
+    return Result.succeed(sysUserService.getUserMenus(userId));
+  }
+
   @PostMapping("/saveUser")
   public Result<Void> saveUser(@RequestBody @Valid SysUserCreateDTO sysUserCreateDTO) {
     sysUserService.saveUser(sysUserCreateDTO);
     return Result.succeed();
   }
 
-  /**
-   * 给用户分配角色
-   */
   @PostMapping("/allocRole")
   public Result<Void> allocRole(@RequestBody @Valid SysUserUpdateDTO sysUserUpdateDTO) {
     sysUserService.allocRole(sysUserUpdateDTO);
     return Result.succeed();
-  }
-
-  /**
-   * 获取用户拥有的相关菜单
-   * @return
-   */
-  @GetMapping("/getMenus")
-  public Result<List<MenuTreeVO>> getMenus() {
-    Long userId = UserSecurityContextHolder.getUserId();
-    return Result.succeed(sysUserService.getMenuTree(userId));
   }
 }

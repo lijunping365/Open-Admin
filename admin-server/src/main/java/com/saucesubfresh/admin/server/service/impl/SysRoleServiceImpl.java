@@ -67,4 +67,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleDO> im
     SysRoleDO sysRoleDO = SysRoleConvert.INSTANCE.convert(sysRoleUpdateDTO);
     sysRoleMapper.updateById(sysRoleDO);
   }
+
+  @Override
+  public void allocAccess(SysRoleUpdateDTO sysRoleUpdateDTO) {
+    SysRoleDO sysRoleDO = SysRoleConvert.INSTANCE.convert(sysRoleUpdateDTO);
+    sysRoleMapper.updateById(sysRoleDO);
+  }
 }

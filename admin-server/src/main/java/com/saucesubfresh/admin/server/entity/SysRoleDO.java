@@ -37,6 +37,10 @@ public class SysRoleDO extends BaseDO implements Serializable {
    */
   private String menus;
   /**
+   * 权限id，逗号分隔字符串
+   */
+  private String access;
+  /**
    * 排序字段
    */
   private Integer sort;

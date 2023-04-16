@@ -30,6 +30,6 @@ public interface SysUserService {
 
   void allocRole(SysUserUpdateDTO sysUserUpdateDTO);
 
-  List<MenuTreeVO> getMenuTree(Long userId);
+  List<MenuTreeVO> getUserMenus(Long userId);
 }
 

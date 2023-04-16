@@ -29,11 +29,8 @@ public interface SysRoleService {
 
   List<SysRoleRespDTO> selectAll();
 
-  /**
-   * 分配权限
-   *
-   * @return
-   */
   void allocMenu(SysRoleUpdateDTO sysRoleUpdateDTO);
+
+  void allocAccess(SysRoleUpdateDTO sysRoleUpdateDTO);
 }
 

@@ -39,5 +39,9 @@ public class SysRoleUpdateDTO implements Serializable {
    * 菜单id，逗号分隔字符串
    */
   private String menus;
+  /**
+   * 权限id，逗号分隔字符串
+   */
+  private String access;
 
 }

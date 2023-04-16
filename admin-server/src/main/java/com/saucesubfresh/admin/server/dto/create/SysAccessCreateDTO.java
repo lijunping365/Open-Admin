@@ -3,18 +3,19 @@ package com.saucesubfresh.admin.server.dto.create;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 /**
- * 角色表
+ * 权限表
  *
  * @author karong
  * @email lijunping365@gmail.com
  * @date 2020-09-03 17:22:44
  */
 @Data
-public class SysRoleCreateDTO implements Serializable {
+public class SysAccessCreateDTO implements Serializable {
   private static final long serialVersionUID = 1L;
 
   /**
@@ -22,24 +23,13 @@ public class SysRoleCreateDTO implements Serializable {
    */
   private Long id;
   /**
-   * 角色名称
+   * 权限名称
    */
-  @NotEmpty
+  @NotBlank(message = "权限名称不能为空")
   private String name;
   /**
-   * 提示
+   * 请求路径
    */
-  private String memo;
-  /**
-   * 排序字段
-   */
-  private Integer sort;
-  /**
-   * 菜单id，逗号分隔字符串
-   */
-  private String menus;
-  /**
-   * 权限id，逗号分隔字符串
-   */
-  private String access;
+  @NotBlank(message = "权限路径不能为空")
+  private String path;
 }

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * @date 2020-09-03 11:28:02
  */
 @Data
-public class SysRoleRespDTO implements Serializable {
+public class SysAccessRespDTO implements Serializable {
   private static final long serialVersionUID = 1L;
 
   /**
@@ -22,25 +22,13 @@ public class SysRoleRespDTO implements Serializable {
    */
   private Long id;
   /**
-   * 角色名称
+   * 权限名称
    */
   private String name;
   /**
-   * 提示
+   * 请求路径
    */
-  private String memo;
-  /**
-   * 排序字段
-   */
-  private Integer sort;
-  /**
-   * 菜单id，逗号分隔字符串
-   */
-  private String menus;
-  /**
-   * 权限id，逗号分隔字符串
-   */
-  private String access;
+  private String path;
   /**
    * 创建时间
    */

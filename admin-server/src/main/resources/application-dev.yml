@@ -65,5 +65,3 @@ com:
       ignore-paths:
         - "/captcha/**"
         - "/login/**"
-        - "/user/currentUser"
-        - "/menu/tree"

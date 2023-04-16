@@ -38,9 +38,5 @@ public class SysMenuRespDTO extends TreeNode<SysMenuRespDTO> implements Serializ
    * 备注
    */
   private String memo;
-  /**
-   * 请求路径，逗号分隔字符串
-   */
-  private String path;
 
 }

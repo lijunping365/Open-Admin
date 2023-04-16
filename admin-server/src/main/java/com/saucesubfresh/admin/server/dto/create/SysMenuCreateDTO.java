@@ -48,9 +48,5 @@ public class SysMenuCreateDTO implements Serializable {
    * 备注
    */
   private String memo;
-  /**
-   * 请求路径，逗号分隔字符串
-   */
-  private String path;
 
 }

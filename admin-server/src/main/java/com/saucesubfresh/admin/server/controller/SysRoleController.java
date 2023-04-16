@@ -58,12 +58,15 @@ public class SysRoleController {
     return Result.succeed();
   }
 
-  /**
-   * 给角色分配菜单
-   */
   @PostMapping("/allocMenu")
   public Result<Void> allocMenu(@RequestBody @Valid SysRoleUpdateDTO sysRoleUpdateDTO) {
     sysRoleService.allocMenu(sysRoleUpdateDTO);
+    return Result.succeed();
+  }
+
+  @PostMapping("/allocAccess")
+  public Result<Void> allocAccess(@RequestBody @Valid SysRoleUpdateDTO sysRoleUpdateDTO) {
+    sysRoleService.allocAccess(sysRoleUpdateDTO);
     return Result.succeed();
   }
 }
