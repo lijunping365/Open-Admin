@@ -7,8 +7,8 @@ import com.saucesubfresh.admin.server.dto.resp.SysMenuRespDTO;
 import com.saucesubfresh.admin.server.dto.update.SysMenuUpdateDTO;
 import com.saucesubfresh.admin.server.entity.SysMenuDO;
 import com.saucesubfresh.admin.server.vo.MenuTreeVO;
-import com.saucesubfresh.admin.server.vo.SysMenuVO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -29,13 +29,14 @@ public interface SysMenuConvert {
 
   SysMenuRespDTO convert(SysMenuDO sysMenuDO);
 
-  SysMenuVO convertVO(SysMenuDO sysMenuDO);
-
   SysMenuDO convert(SysMenuCreateDTO sysMenuCreateDTO);
 
   SysMenuDO convert(SysMenuUpdateDTO sysMenuUpdateDTO);
 
   List<SysMenuRespDTO> convertList(List<SysMenuDO> sysMenuDOList);
+
+  @Mapping(target = "path", source = "route")
+  MenuTreeVO convertMenuTree(SysMenuDO sysMenuDO);
 
   List<MenuTreeVO> convertListVO(List<SysMenuDO> menuList);
 }

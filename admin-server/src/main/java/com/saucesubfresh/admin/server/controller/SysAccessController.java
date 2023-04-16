@@ -16,7 +16,7 @@ import java.util.List;
 
 
 /**
- * 后台用户角色管理
+ * 后台用户权限管理
  *
  * @author karong
  * @email lijunping365@gmail.com
