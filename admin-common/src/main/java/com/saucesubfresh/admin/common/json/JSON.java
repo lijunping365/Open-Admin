@@ -2,11 +2,7 @@ package com.saucesubfresh.admin.common.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.IOException;
@@ -144,34 +140,6 @@ public abstract class JSON {
     }
   }
 
-  /**
-   *
-   * @param input T类型的泛型
-   * @param <T> T类型的泛型
-   * @return 返回 Map<String, Object>
-   * @throws IOException
-   */
-  public static <T> Map<String, Object> parseMapObject(T input) throws IOException {
-    return INSTANCE.readValue(INSTANCE.writeValueAsBytes(input), new TypeReference<>() {
-    });
-  }
-
-  /**
-   *
-   * @param input T类型的泛型
-   * @param <T> T类型的泛型
-   * @return 返回 Map<String, String>
-   * @throws IOException
-   */
-  public static <T> Map<String, String> parseMapString(T input) throws IOException {
-    try {
-      return INSTANCE.readValue(INSTANCE.writeValueAsBytes(input), new TypeReference<>() {
-      });
-    }catch (JsonProcessingException e){
-      throw new JsonException(e);
-    }
-  }
-
 
   /**
    * 将json反序列化为 Map
@@ -198,22 +166,10 @@ public abstract class JSON {
    */
   public static String getNodeValue(String json, String nodeKey) {
     try {
-      var jsonNode = INSTANCE.readTree(json);
+      final JsonNode jsonNode = INSTANCE.readTree(json);
       return jsonNode.findValue(nodeKey).toString();
     } catch (JsonProcessingException e) {
       throw new JsonException(e);
     }
   }
-
-  @SuppressWarnings(("unchecked"))
-  public static <T> T getJSON(String json, String key, Class<T> clazz) {
-    try {
-      var jsonNode = INSTANCE.readTree(json);
-      var nodeValue = jsonNode.findValue(key).toString();
-      return parse(nodeValue, clazz);
-    } catch (JsonProcessingException e) {
-      throw new JsonException(e);
-    }
-  }
-
 }
