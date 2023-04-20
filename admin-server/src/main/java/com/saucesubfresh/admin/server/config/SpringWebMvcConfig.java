@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @author lijunping on 2021/6/22
@@ -12,7 +14,7 @@ import org.springframework.context.annotation.Import;
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @Import(JacksonConfiguration.class)
-public class SpringWebMvcConfig {
+public class SpringWebMvcConfig implements WebMvcConfigurer {
 
     /**
      * Spring Web Mvc 的全局异常，全局返回结果处理
@@ -27,5 +29,10 @@ public class SpringWebMvcConfig {
             return new GlobalExceptionHandler();
         }
 
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/","classpath:/templates/");
     }
 }
